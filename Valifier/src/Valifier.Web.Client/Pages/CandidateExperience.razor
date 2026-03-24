@@ -1,0 +1,66 @@
+@page "/candidate-experience"
+@rendermode InteractiveWebAssembly
+
+<PageTitle>Candidate experience</PageTitle>
+
+<MudStack Spacing="3">
+    <MudText Typo="Typo.h3">Candidate experience</MudText>
+    <MudText Typo="Typo.body1">This browser-side route is where interactive self-assessment can evolve without pulling the whole workspace into WebAssembly.</MudText>
+
+    <MudGrid Spacing="3">
+        @foreach (var step in _journey)
+        {
+            <MudItem xs="12" md="6">
+                <MudPaper Class="surface-card" Elevation="0">
+                    <MudText Typo="Typo.overline">@step.Channel</MudText>
+                    <MudText Typo="Typo.h6">@step.Title</MudText>
+                    <MudText Typo="Typo.body2">@step.Detail</MudText>
+                </MudPaper>
+            </MudItem>
+        }
+    </MudGrid>
+
+    <MudPaper Class="surface-card" Elevation="0">
+        <MudText Typo="Typo.h5">Self-assessed confidence</MudText>
+        <MudText Typo="Typo.body2">Move the slider to explore how much role clarity the candidate feels before opting into the AI interview.</MudText>
+        <MudSlider @bind-Value="_confidence" Min="0" Max="100" Step="5" Color="Color.Primary" />
+        <MudText Typo="Typo.body1">Confidence score: @_confidence%</MudText>
+
+        <MudStack Row="true" Spacing="1" Class="signal-row">
+            @foreach (var signal in _signals)
+            {
+                <MudTooltip Text="@signal.Description">
+                    <MudChip T="string" Variant="Variant.Outlined" Color="@ResolveSignalColor(signal)">@signal.Label</MudChip>
+                </MudTooltip>
+            }
+        </MudStack>
+    </MudPaper>
+</MudStack>
+
+@code {
+    private readonly CandidateJourneyStepContract[] _journey =
+    [
+        new("Explore the role", "Candidates enter through the interactive job post and ask grounded questions before committing to an application.", "Anonymous URL"),
+        new("Opt into evaluation", "Minimal registration unlocks the interview and psychometric stages without requiring a CV upload.", "Registered entry"),
+        new("Receive structured feedback", "Communication stays systematic from invitation to outcome, preserving transparency and respect.", "Flow manager")
+    ];
+
+    private readonly SelfAssessmentSignalContract[] _signals =
+    [
+        new("Role clarity", "The candidate understands the expectations and fit criteria."),
+        new("Process trust", "The structured flow feels consistent and fair."),
+        new("Next-step energy", "The candidate wants to continue into the interview stage.")
+    ];
+
+    private int _confidence = 65;
+
+    private static Color ResolveSignalColor(SelfAssessmentSignalContract signal)
+    {
+        return signal.Label switch
+        {
+            "Role clarity" => Color.Primary,
+            "Process trust" => Color.Secondary,
+            _ => Color.Success
+        };
+    }
+}

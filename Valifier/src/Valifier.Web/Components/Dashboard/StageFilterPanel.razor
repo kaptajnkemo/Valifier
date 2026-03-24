@@ -1,0 +1,47 @@
+@using Valifier.Application.Features.Dashboard
+
+<MudPaper Class="surface-card" Elevation="0">
+    <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Class="filter-header">
+        <MudStack Spacing="0">
+            <MudText Typo="Typo.h5">Interactive workspace lens</MudText>
+            <MudText Typo="Typo.body2">This panel runs with server interactivity so stage filtering stays cheap while the browser-only page remains reserved for candidate exploration.</MudText>
+        </MudStack>
+        <MudSelect T="string" Dense="true" Variant="Variant.Outlined" Label="Stage" @bind-Value="_selectedStage" Class="stage-select">
+            @foreach (var stage in _stages)
+            {
+                <MudSelectItem T="string" Value="@stage">@stage</MudSelectItem>
+            }
+        </MudSelect>
+    </MudStack>
+
+    <MudGrid Spacing="2">
+        @foreach (var module in FilteredModules)
+        {
+            <MudItem xs="12" md="6">
+                <MudPaper Class="module-card" Elevation="0">
+                    <MudText Typo="Typo.subtitle1">@module.Name</MudText>
+                    <MudText Typo="Typo.body2">@module.Purpose</MudText>
+                </MudPaper>
+            </MudItem>
+        }
+    </MudGrid>
+</MudPaper>
+
+@code {
+    [Parameter, EditorRequired]
+    public PlatformOverview Overview { get; set; } = default!;
+
+    private string _selectedStage = "All stages";
+
+    private IReadOnlyList<string> _stages = [];
+
+    private IEnumerable<PlatformModuleOverview> FilteredModules =>
+        _selectedStage == "All stages"
+            ? Overview.Modules
+            : Overview.Modules.Where(module => module.Stage == _selectedStage);
+
+    protected override void OnParametersSet()
+    {
+        _stages = ["All stages", .. Overview.Modules.Select(module => module.Stage).Distinct(StringComparer.Ordinal)];
+    }
+}

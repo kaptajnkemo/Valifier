@@ -1,0 +1,12 @@
+{
+  "toggl_api_token": "7bc5530c57d15c199bb36b22ed517c7d",
+  "workspace_id": 9320737,
+  "project_id": 209983126,
+  "project_name": "People's Doctor",
+  "source_file": "C:/Dev/Fraia/PeoplesDoctor/Toggle/SoT/PD march.xlsx",
+  "timezone": "Europe/Copenhagen",
+  "duplicate_policy": "skip_exact_match",
+  "report_format": "pdf",
+  "report_output_dir": "output",
+  "created_with": "Codex Toggl Worklog Skill"
+}

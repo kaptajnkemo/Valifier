@@ -1,0 +1,36 @@
+@page "/admin/tenants/new"
+@model Valifier.Web.Pages.Admin.Tenants.NewModel
+@{
+    ViewData["Title"] = "Create tenant";
+}
+
+<section class="vf-panel">
+    <div class="vf-eyebrow">Tenant provisioning</div>
+    <h1>Create tenant</h1>
+
+    <form method="post" class="vf-form">
+        <div asp-validation-summary="ModelOnly" class="vf-validation"></div>
+
+        <label class="vf-field">
+            <span>Tenant name</span>
+            <input asp-for="Input.TenantName" />
+        </label>
+
+        <label class="vf-field">
+            <span>Initial tenant superuser display name</span>
+            <input asp-for="Input.InitialSuperuserDisplayName" />
+        </label>
+
+        <label class="vf-field">
+            <span>Initial tenant superuser email address</span>
+            <input asp-for="Input.InitialSuperuserEmail" type="email" autocomplete="username" />
+        </label>
+
+        <label class="vf-field">
+            <span>Initial tenant superuser password</span>
+            <input asp-for="Input.InitialSuperuserPassword" type="password" autocomplete="new-password" />
+        </label>
+
+        <button class="vf-primary-button" type="submit">Create tenant</button>
+    </form>
+</section>

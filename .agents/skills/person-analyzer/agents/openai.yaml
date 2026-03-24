@@ -1,0 +1,7 @@
+interface:
+  display_name: "Person Analyzer"
+  short_description: "Build an auditable profile of a real person"
+  default_prompt: "Use $person-analyzer to analyze a person and produce an auditable profile."
+
+policy:
+  allow_implicit_invocation: true

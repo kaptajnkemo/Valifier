@@ -1,0 +1,7 @@
+interface:
+  display_name: "Create .NET Solution"
+  short_description: "Scaffold a strict Clean Architecture .NET solution"
+  default_prompt: "Use $create-dotnet-solution to create a .NET solution called MyApp."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,36 @@
+@page "/admin/tenants/{tenantId:guid}"
+@model Valifier.Web.Pages.Admin.Tenants.DetailsModel
+@{
+    ViewData["Title"] = "Tenant detail";
+}
+
+<section class="vf-panel">
+    <div class="vf-eyebrow">Tenant detail</div>
+    <h1>Tenant detail</h1>
+
+    @if (Model.Tenant is null)
+    {
+        <p>Tenant not found</p>
+    }
+    else
+    {
+        <dl class="vf-detail-grid">
+            <div>
+                <dt>Tenant name</dt>
+                <dd>@Model.Tenant.Name</dd>
+            </div>
+            <div>
+                <dt>Initial tenant superuser display name</dt>
+                <dd>@Model.Tenant.InitialSuperuserDisplayName</dd>
+            </div>
+            <div>
+                <dt>Initial tenant superuser email address</dt>
+                <dd>@Model.Tenant.InitialSuperuserEmail</dd>
+            </div>
+            <div>
+                <dt>First sign-in completed</dt>
+                <dd>First sign-in completed: @(Model.Tenant.FirstSignInCompleted ? "Yes" : "No")</dd>
+            </div>
+        </dl>
+    }
+</section>

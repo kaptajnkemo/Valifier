@@ -1,0 +1,28 @@
+@page "/tenant/dashboard"
+@model Valifier.Web.Pages.Tenant.DashboardModel
+@{
+    ViewData["Title"] = "Tenant dashboard";
+}
+
+<section class="vf-panel">
+    <div class="vf-eyebrow">Tenant workspace</div>
+    <h1>Tenant dashboard</h1>
+
+    @if (Model.Workspace is null)
+    {
+        <p>Tenant not found</p>
+    }
+    else
+    {
+        <dl class="vf-detail-grid">
+            <div>
+                <dt>Tenant name</dt>
+                <dd>@Model.Workspace.TenantName</dd>
+            </div>
+            <div>
+                <dt>Signed-in user email address</dt>
+                <dd>@Model.Workspace.SignedInUserEmail</dd>
+            </div>
+        </dl>
+    }
+</section>

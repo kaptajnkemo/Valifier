@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>aspnet-Valifier_Web-eb9e551e-9044-4f03-b101-c0b48c84bc46</UserSecretsId>
+    <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MudBlazor" Version="9.2.0" />
+    <ProjectReference Include="..\Valifier.Web.Client\Valifier.Web.Client.csproj" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Valifier.Application\Valifier.Application.csproj" />
+    <ProjectReference Include="..\Valifier.Infrastructure\Valifier.Infrastructure.csproj" />
+    <ProjectReference Include="..\Valifier.Contracts\Valifier.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Components\Account\**\*.cs" />
+    <Content Remove="Components\Account\**\*" />
+    <EmbeddedResource Remove="Components\Account\**\*" />
+    <None Remove="Components\Account\**\*" />
+    <RazorComponent Remove="Components\Account\**\*.razor" />
+  </ItemGroup>
+
+</Project>

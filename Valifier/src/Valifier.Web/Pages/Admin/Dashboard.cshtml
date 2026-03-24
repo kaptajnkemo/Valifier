@@ -1,0 +1,39 @@
+@page "/admin/dashboard"
+@model Valifier.Web.Pages.Admin.DashboardModel
+@{
+    ViewData["Title"] = "Admin dashboard";
+}
+
+<section class="vf-panel">
+    <div class="vf-eyebrow">Global Admin</div>
+    <h1>Admin dashboard</h1>
+
+    <div class="vf-stat-card">
+        <span>Total tenants</span>
+        <strong data-testid="tenant-count-value">@Model.Dashboard.TotalTenants</strong>
+    </div>
+
+    <div class="vf-action-row">
+        <a class="vf-primary-link" href="/admin/tenants/new">Create tenant</a>
+    </div>
+
+    @if (Model.Dashboard.TotalTenants == 0)
+    {
+        <p>No tenants found</p>
+    }
+    else
+    {
+        <ul class="vf-tenant-list">
+            @foreach (var tenant in Model.Dashboard.Tenants)
+            {
+                <li class="vf-tenant-row" data-testid="tenant-row">
+                    <div>
+                        <strong>@tenant.Name</strong>
+                        <p>@tenant.InitialSuperuserEmail</p>
+                    </div>
+                    <a class="vf-secondary-link" href="/admin/tenants/@tenant.TenantId">View tenant</a>
+                </li>
+            }
+        </ul>
+    }
+</section>

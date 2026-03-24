@@ -1,0 +1,7 @@
+interface:
+  display_name: "Toggl Worklog Sync"
+  short_description: "Sync workbook worklogs into Toggl and export PDF"
+  default_prompt: "Use $toggl-worklog-sync to sync the local workbook into Toggl and export the monthly PDF report."
+
+policy:
+  allow_implicit_invocation: true

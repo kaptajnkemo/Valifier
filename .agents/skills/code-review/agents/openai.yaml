@@ -1,0 +1,7 @@
+interface:
+  display_name: "Code Review"
+  short_description: "Run a findings-only audit of production code"
+  default_prompt: "Use $code-review to review the current code changes and report findings only."
+
+policy:
+  allow_implicit_invocation: true

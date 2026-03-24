@@ -1,0 +1,7 @@
+interface:
+  display_name: "Skill Factory"
+  short_description: "Create a new Codex skill package correctly"
+  default_prompt: "Use $skill-factory to create a new Codex skill package under .agents/skills."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,79 @@
+@page "/platform-overview"
+@inject GetPlatformOverviewQueryHandler OverviewHandler
+
+<PageTitle>Home</PageTitle>
+
+@if (_overview is null)
+{
+    <MudProgressLinear Indeterminate="true" Color="Color.Primary" />
+}
+else
+{
+    <MudStack Spacing="4">
+        <MudPaper Class="hero-panel" Elevation="0">
+            <MudText Typo="Typo.overline" Class="hero-kicker">Valifier</MudText>
+            <MudText Typo="Typo.h2">Structured early hiring for serious teams.</MudText>
+            <MudText Typo="Typo.body1" Class="hero-copy">@_overview.Summary</MudText>
+        </MudPaper>
+
+        <MudGrid Spacing="3">
+            @foreach (var metric in _overview.Metrics)
+            {
+                <MudItem xs="12" md="4">
+                    <MudPaper Class="metric-card" Elevation="0">
+                        <MudText Typo="Typo.overline">@metric.Label</MudText>
+                        <MudText Typo="Typo.h3">@metric.Value</MudText>
+                        <MudText Typo="Typo.body2">@metric.Detail</MudText>
+                    </MudPaper>
+                </MudItem>
+            }
+        </MudGrid>
+
+        <MudGrid Spacing="3">
+            <MudItem xs="12" lg="7">
+                <MudPaper Class="surface-card" Elevation="0">
+                    <MudText Typo="Typo.h5">Module landscape</MudText>
+                    <MudText Typo="Typo.body2">Each capability from the system brief is represented as an explicit module with a journey-stage anchor.</MudText>
+
+                    <MudStack Spacing="2" Class="module-list">
+                        @foreach (var module in _overview.Modules.Take(4))
+                        {
+                            <MudPaper Class="module-card" Elevation="0">
+                                <MudText Typo="Typo.subtitle1">@module.Name</MudText>
+                                <MudText Typo="Typo.body2">@module.Purpose</MudText>
+                                <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined">@module.Stage</MudChip>
+                            </MudPaper>
+                        }
+                    </MudStack>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" lg="5">
+                <MudPaper Class="surface-card" Elevation="0">
+                    <MudText Typo="Typo.h5">Role model</MudText>
+                    <MudList T="string" Dense="true">
+                        @foreach (var role in _overview.Roles)
+                        {
+                            <MudListItem T="string">
+                                <MudStack Spacing="0">
+                                    <MudText Typo="Typo.subtitle2">@role.Name</MudText>
+                                    <MudText Typo="Typo.body2">@role.Responsibility</MudText>
+                                </MudStack>
+                            </MudListItem>
+                        }
+                    </MudList>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+
+        <StageFilterPanel @rendermode="InteractiveServer" Overview="_overview" />
+    </MudStack>
+}
+
+@code {
+    private PlatformOverview? _overview;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _overview = await OverviewHandler.HandleAsync(new GetPlatformOverviewQuery());
+    }
+}

@@ -1,0 +1,7 @@
+interface:
+  display_name: "SIP Template"
+  short_description: "Create and edit Strategic Implementation Plans"
+  default_prompt: "Use $sip-template to create or update a SIP entry in the required format."
+
+policy:
+  allow_implicit_invocation: true
