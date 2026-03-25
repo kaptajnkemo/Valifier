@@ -1,6 +1,8 @@
+using Valifier.Application.Features.Compliance;
 using Microsoft.AspNetCore.Identity;
 using MudBlazor.Services;
 using Valifier.Application.Features.Dashboard;
+using Valifier.Application.Features.PrivacyRequests;
 using Valifier.Application.Features.Tenants.AdminDashboard;
 using Valifier.Application.Features.Tenants.Provisioning;
 using Valifier.Application.Features.Tenants.TenantDetail;
@@ -9,6 +11,7 @@ using Valifier.Infrastructure.DependencyInjection;
 using Valifier.Infrastructure.Identity;
 using Valifier.Infrastructure.Initialization;
 using Valifier.Web.Components;
+using Valifier.Web.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,11 +40,15 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/sign-in";
 });
 builder.Services.AddMudServices();
+builder.Services.AddScoped<GetComplianceMetadataQueryHandler>();
 builder.Services.AddScoped<GetPlatformOverviewQueryHandler>();
+builder.Services.AddScoped<CreatePrivacyRequestCommandHandler>();
+builder.Services.AddScoped<GetPrivacyRequestQueryHandler>();
 builder.Services.AddScoped<GetAdminDashboardQueryHandler>();
 builder.Services.AddScoped<CreateTenantCommandHandler>();
 builder.Services.AddScoped<GetTenantDetailQueryHandler>();
 builder.Services.AddScoped<GetTenantWorkspaceQueryHandler>();
+builder.Services.AddScoped<UpdatePrivacyRequestStatusCommandHandler>();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
@@ -66,6 +73,7 @@ app.UseAntiforgery();
 
 app.MapStaticAssets();
 app.MapRazorPages();
+app.MapComplianceApi();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()

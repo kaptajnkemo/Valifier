@@ -116,7 +116,7 @@
 - **Category:** SYSTEM-ONLY
 - *Objective: Establish verifiable recording of committed data changes, governed data metadata, and privacy-request state so platform operations can be traced and governed before broader recruitment workflows expand.*
 
-- [ ] **SIP-2.1: Committed data changes create transaction audit records**
+- [x] **SIP-2.1: Committed data changes create transaction audit records**
   - **Summary:** The system creates one transaction audit record for each committed create, update, and delete operation on governed records.
   - **Objective (WHY):** Traceability of data changes must exist even when an application service does not emit a business audit event.
   - **Scope Guard:** This SIP authorizes only the changes strictly required to satisfy the acceptance criteria. Incidental fixes, cleanups, refactors, or improvements outside the described change are not permitted.
@@ -136,9 +136,9 @@
     5. **AT5 - Audit-store inspection of one transaction audit record shows transaction identifier, UTC commit timestamp, operation type, record type, record identifier, actor identifier or `Anonymous`, and tenant identifier or `Platform`**
     6. **AT6 - Submission of an update request for an existing transaction audit record returns a rejection result**
   - **Explicit Non-Goals (OUT OF SCOPE):** Dashboard metrics. Trendlines. Business-event taxonomy. External log aggregation.
-  - **Status:** Planned 2026-03-24.
+  - **Status:** Completed 2026-03-24.
 
-- [ ] **SIP-2.2: Governed records expose compliance metadata**
+- [x] **SIP-2.2: Governed records expose compliance metadata**
   - **Summary:** The system exposes compliance metadata for governed user and tenant-scoped records through an application contract.
   - **Objective (WHY):** Retention, lawful handling, and request processing require governed records to carry observable compliance metadata.
   - **Scope Guard:** This SIP authorizes only the changes strictly required to satisfy the acceptance criteria. Incidental fixes, cleanups, refactors, or improvements outside the described change are not permitted.
@@ -156,9 +156,9 @@
     4. **AT4 - API request for compliance metadata for an existing governed record returns one subject-scope value**
     5. **AT5 - API request for compliance metadata for a non-existent governed record returns `Record not found`**
   - **Explicit Non-Goals (OUT OF SCOPE):** Retention execution. Data export payload delivery. Data erasure execution.
-  - **Status:** Planned 2026-03-24.
+  - **Status:** Completed 2026-03-24.
 
-- [ ] **SIP-2.3: Data-subject requests can be recorded and state-tracked**
+- [x] **SIP-2.3: Data-subject requests can be recorded and state-tracked**
   - **Summary:** The system records privacy requests for a subject and exposes request status through an application contract.
   - **Objective (WHY):** Privacy operations need a system record of incoming requests before fulfillment workflows are added.
   - **Scope Guard:** This SIP authorizes only the changes strictly required to satisfy the acceptance criteria. Incidental fixes, cleanups, refactors, or improvements outside the described change are not permitted.
@@ -176,9 +176,9 @@
     4. **AT4 - API request for privacy request details returns one of the status values `Received`, `InReview`, `Completed`, or `Rejected`**
     5. **AT5 - API request for privacy request details returns request identifier, subject identifier, request type, submitted timestamp, and current status**
   - **Explicit Non-Goals (OUT OF SCOPE):** Candidate-facing request submission UI. Data export generation. Data deletion execution.
-  - **Status:** Planned 2026-03-24.
+  - **Status:** Completed 2026-03-24.
 
-- [ ] **SIP-2.4: Compliance contracts are schema-verified**
+- [x] **SIP-2.4: Compliance contracts are schema-verified**
   - **Summary:** The system validates transaction audit, compliance metadata, and privacy request contracts through schema-focused tests.
   - **Objective (WHY):** A SYSTEM-ONLY compliance epic requires explicit verification of the contracts that later workflows and oversight views will consume.
   - **Scope Guard:** This SIP authorizes only the changes strictly required to satisfy the acceptance criteria. Incidental fixes, cleanups, refactors, or improvements outside the described change are not permitted.
@@ -194,4 +194,4 @@
     3. **AT3 - Contract test for the privacy request schema fails when one required field is missing**
     4. **AT4 - Contract test for each schema passes when all required fields are present**
   - **Explicit Non-Goals (OUT OF SCOPE):** Dashboard rendering. Alerting rules. Reporting calculations.
-  - **Status:** Planned 2026-03-24.
+  - **Status:** Completed 2026-03-24.
