@@ -2,4 +2,7 @@ namespace Valifier.Application.Features.Tenants.TenantWorkspace;
 
 public sealed record TenantWorkspaceView(
     string TenantName,
-    string SignedInUserEmail);
+    string SignedInUserEmail,
+    int TotalTenantUsers,
+    int TotalTenantSourcesOfTruth,
+    int TotalTenantProjects);

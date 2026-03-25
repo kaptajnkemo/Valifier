@@ -7,9 +7,12 @@ using Valifier.Application.Features.Compliance;
 using Valifier.Application.Features.Dashboard;
 using Valifier.Application.Features.PrivacyRequests;
 using Valifier.Application.Features.Tenants.AdminDashboard;
+using Valifier.Application.Features.Tenants.TenantProjects;
+using Valifier.Application.Features.Tenants.TenantSourceOfTruths;
 using Valifier.Application.Features.Tenants.Provisioning;
 using Valifier.Application.Features.Tenants.SignInTracking;
 using Valifier.Application.Features.Tenants.TenantDetail;
+using Valifier.Application.Features.Tenants.TenantUsers;
 using Valifier.Application.Features.Tenants.TenantWorkspace;
 using Valifier.Infrastructure.Identity;
 using Valifier.Infrastructure.Initialization;
@@ -56,6 +59,9 @@ public static class InfrastructureServiceCollectionExtensions
         services.AddScoped<IInitialTenantSignInRecorder, InitialTenantSignInRecorder>();
         services.AddScoped<ITenantDetailReader, TenantDetailReader>();
         services.AddScoped<ITenantWorkspaceReader, TenantWorkspaceReader>();
+        services.AddScoped<ITenantUserDirectoryReader, TenantUserDirectoryReader>();
+        services.AddScoped<ITenantSourceOfTruthDirectoryReader, TenantSourceOfTruthDirectoryReader>();
+        services.AddScoped<ITenantProjectDirectoryReader, TenantProjectDirectoryReader>();
         services.AddScoped<DomainIdentityMapper>();
 
         return services;

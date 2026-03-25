@@ -2,27 +2,27 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Valifier.Application.Features.Tenants.TenantWorkspace;
+using Valifier.Application.Features.Tenants.TenantProjects;
 using Valifier.Domain.Identity;
 using Valifier.Infrastructure.Identity;
 
 namespace Valifier.Web.Pages.Tenant;
 
 [Authorize(Roles = RoleNames.TenantWorkspaceRoles)]
-public sealed class DashboardModel : PageModel
+public sealed class ProjectsModel : PageModel
 {
-    private readonly GetTenantWorkspaceQueryHandler _handler;
+    private readonly GetTenantProjectDirectoryQueryHandler _handler;
     private readonly UserManager<ApplicationUser> _userManager;
 
-    public DashboardModel(
-        GetTenantWorkspaceQueryHandler handler,
+    public ProjectsModel(
+        GetTenantProjectDirectoryQueryHandler handler,
         UserManager<ApplicationUser> userManager)
     {
         _handler = handler;
         _userManager = userManager;
     }
 
-    public TenantWorkspaceView? Workspace { get; private set; }
+    public TenantProjectDirectoryView Directory { get; private set; } = new(0, []);
 
     public async Task<IActionResult> OnGetAsync(CancellationToken cancellationToken)
     {
@@ -33,14 +33,14 @@ public sealed class DashboardModel : PageModel
             return Redirect("/sign-in");
         }
 
-        Workspace = await _handler.HandleAsync(new GetTenantWorkspaceQuery(user.Id), cancellationToken);
+        var directory = await _handler.HandleAsync(new GetTenantProjectDirectoryQuery(user.Id), cancellationToken);
 
-        return Workspace is null
-            ? Redirect("/sign-in")
-            : Page();
+        if (directory is null)
+        {
+            return Redirect("/sign-in");
+        }
+
+        Directory = directory;
+        return Page();
     }
-
-    public bool CanManageTenantUsers => User.IsInRole(RoleNames.Superuser);
-
-    public bool CanManageTenantSourcesOfTruth => User.IsInRole(RoleNames.Superuser);
 }

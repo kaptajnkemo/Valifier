@@ -68,6 +68,11 @@ public sealed class SignInModel : PageModel
             return Redirect("/tenant/dashboard");
         }
 
+        if (roles.Contains(RoleNames.HiringManager, StringComparer.Ordinal) && user.TenantId.HasValue)
+        {
+            return Redirect("/tenant/dashboard");
+        }
+
         await _signInManager.SignOutAsync();
         ModelState.AddModelError(string.Empty, "This account does not have an allowed route.");
         return Page();

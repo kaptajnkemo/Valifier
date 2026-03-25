@@ -1,9 +1,12 @@
+using Valifier.Domain.Tenancy;
+
 namespace Valifier.Domain.Recruitment;
 
 public sealed class RecruitmentProject
 {
     public RecruitmentProject(
         RecruitmentProjectId id,
+        TenantId? tenantId,
         string title,
         string department,
         RecruitmentProjectStatus status,
@@ -20,6 +23,7 @@ public sealed class RecruitmentProject
         }
 
         Id = id;
+        TenantId = tenantId;
         Title = title.Trim();
         Department = department.Trim();
         Status = status;
@@ -34,6 +38,8 @@ public sealed class RecruitmentProject
     }
 
     public RecruitmentProjectId Id { get; private set; }
+
+    public TenantId? TenantId { get; private set; }
 
     public string Title { get; private set; }
 
