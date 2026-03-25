@@ -4,12 +4,15 @@ namespace Valifier.Domain.Knowledge;
 
 public sealed class TenantSourceOfTruth
 {
+    private readonly List<TenantSourceOfTruthEntry> _entries;
+
     public TenantSourceOfTruth(
         TenantSourceOfTruthId id,
         TenantId tenantId,
         string topic,
         string name,
-        string schemaVersion)
+        string schemaVersion,
+        IEnumerable<TenantSourceOfTruthEntry>? entries = null)
     {
         if (string.IsNullOrWhiteSpace(topic))
         {
@@ -31,6 +34,7 @@ public sealed class TenantSourceOfTruth
         Topic = topic.Trim();
         Name = name.Trim();
         SchemaVersion = schemaVersion.Trim();
+        _entries = entries?.ToList() ?? [];
     }
 
     private TenantSourceOfTruth()
@@ -40,6 +44,7 @@ public sealed class TenantSourceOfTruth
         Topic = string.Empty;
         Name = string.Empty;
         SchemaVersion = string.Empty;
+        _entries = [];
     }
 
     public TenantSourceOfTruthId Id { get; private set; }
@@ -51,4 +56,11 @@ public sealed class TenantSourceOfTruth
     public string Name { get; private set; }
 
     public string SchemaVersion { get; private set; }
+
+    public IReadOnlyList<TenantSourceOfTruthEntry> Entries => _entries;
+
+    public void AddEntry(TenantSourceOfTruthEntry entry)
+    {
+        _entries.Add(entry);
+    }
 }

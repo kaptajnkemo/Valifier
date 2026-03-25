@@ -52,8 +52,13 @@ builder.Services.AddScoped<CreateTenantCommandHandler>();
 builder.Services.AddScoped<GetTenantDetailQueryHandler>();
 builder.Services.AddScoped<GetTenantWorkspaceQueryHandler>();
 builder.Services.AddScoped<GetTenantUserDirectoryQueryHandler>();
+builder.Services.AddScoped<CreateHiringManagerCommandHandler>();
 builder.Services.AddScoped<GetTenantSourceOfTruthDirectoryQueryHandler>();
+builder.Services.AddScoped<CreateTenantSourceOfTruthCommandHandler>();
+builder.Services.AddScoped<GetTenantSourceOfTruthDetailQueryHandler>();
 builder.Services.AddScoped<GetTenantProjectDirectoryQueryHandler>();
+builder.Services.AddScoped<CreateTenantProjectCommandHandler>();
+builder.Services.AddScoped<GetTenantProjectDetailQueryHandler>();
 builder.Services.AddScoped<UpdatePrivacyRequestStatusCommandHandler>();
 builder.Services.AddInfrastructure(builder.Configuration);
 

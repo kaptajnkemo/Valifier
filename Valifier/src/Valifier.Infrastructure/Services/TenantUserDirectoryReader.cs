@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Valifier.Application.Features.Tenants.TenantUsers;
+using Valifier.Domain.Identity;
 using Valifier.Infrastructure.Persistence;
 
 namespace Valifier.Infrastructure.Services;
@@ -34,7 +35,7 @@ public sealed class TenantUserDirectoryReader : ITenantUserDirectoryReader
             select new TenantUserDirectoryRow(
                 user.DisplayName,
                 user.Email ?? string.Empty,
-                role.Name ?? string.Empty))
+                role.Name == RoleNames.HiringManager ? "Hiring Manager" : role.Name ?? string.Empty))
             .ToArrayAsync(cancellationToken);
 
         return new TenantUserDirectoryView(users.Length, users);

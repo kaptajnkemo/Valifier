@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Valifier.Application.Features.Tenants.TenantProjects;
+using Valifier.Domain.Identity;
 using Valifier.Domain.Tenancy;
 using Valifier.Infrastructure.Persistence;
 
@@ -16,28 +17,67 @@ public sealed class TenantProjectDirectoryReader : ITenantProjectDirectoryReader
 
     public async Task<TenantProjectDirectoryView?> GetAsync(Guid userId, CancellationToken cancellationToken)
     {
-        var currentUserTenantId = await _dbContext.Users
+        var actor = await _dbContext.Users
             .Where(candidate => candidate.Id == userId && candidate.TenantId != null)
-            .Select(candidate => candidate.TenantId)
+            .Select(candidate => new
+            {
+                candidate.Id,
+                candidate.TenantId
+            })
             .SingleOrDefaultAsync(cancellationToken);
 
-        if (!currentUserTenantId.HasValue)
+        if (actor?.TenantId is null)
         {
             return null;
         }
 
-        var tenantId = new TenantId(currentUserTenantId.Value);
-
-        var projects = await _dbContext.RecruitmentProjects
-            .Where(candidate => candidate.TenantId == tenantId)
-            .OrderBy(candidate => candidate.Title)
-            .Select(candidate => new TenantProjectDirectoryRow(
-                candidate.Id.Value,
-                candidate.Title,
-                candidate.Department,
-                candidate.Status.ToString()))
+        var actorRoles = await (
+            from userRole in _dbContext.UserRoles
+            join role in _dbContext.Roles on userRole.RoleId equals role.Id
+            where userRole.UserId == actor.Id
+            select role.Name ?? string.Empty)
             .ToArrayAsync(cancellationToken);
 
-        return new TenantProjectDirectoryView(projects.Length, projects);
+        var tenantId = new TenantId(actor.TenantId.Value);
+        var isHiringManagerOnly = actorRoles.Contains(RoleNames.HiringManager, StringComparer.Ordinal) &&
+                                  !actorRoles.Contains(RoleNames.Superuser, StringComparer.Ordinal);
+        var actorOwnerUserId = new UserId(actor.Id);
+
+        var projects = await _dbContext.RecruitmentProjects
+            .Where(project => project.TenantId == tenantId &&
+                              (!isHiringManagerOnly || project.OwnerUserId == actorOwnerUserId))
+            .OrderBy(project => project.Title)
+            .Select(project => new
+            {
+                project.Id,
+                project.Title,
+                project.Department,
+                project.OwnerUserId,
+                project.Status
+            })
+            .ToArrayAsync(cancellationToken);
+
+        var ownerIds = projects
+            .Select(project => project.OwnerUserId.Value)
+            .Where(ownerUserId => ownerUserId != Guid.Empty)
+            .Distinct()
+            .ToArray();
+
+        var ownerDisplayNames = ownerIds.Length == 0
+            ? new Dictionary<Guid, string>()
+            : await _dbContext.Users
+                .Where(candidate => ownerIds.Contains(candidate.Id))
+                .ToDictionaryAsync(candidate => candidate.Id, candidate => candidate.DisplayName, cancellationToken);
+
+        var rows = projects
+            .Select(project => new TenantProjectDirectoryRow(
+                project.Id.Value,
+                project.Title,
+                project.Department,
+                ownerDisplayNames.GetValueOrDefault(project.OwnerUserId.Value, string.Empty),
+                project.Status.ToString()))
+            .ToArray();
+
+        return new TenantProjectDirectoryView(rows.Length, rows);
     }
 }

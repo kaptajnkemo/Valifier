@@ -27,9 +27,17 @@
                         <strong>@project.Title</strong>
                         <p>@project.Department</p>
                     </div>
-                    <span>@project.Status</span>
+                    <div>
+                        <span>@project.OwnerDisplayName</span>
+                        <p>@project.Status</p>
+                        <a class="vf-secondary-link" href="/tenant/projects/@project.ProjectId">View project</a>
+                    </div>
                 </li>
             }
         </ul>
     }
+
+    <div class="vf-action-row">
+        <a class="vf-primary-link" href="/tenant/projects/new">Create project</a>
+    </div>
 </section>

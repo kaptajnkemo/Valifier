@@ -60,8 +60,13 @@ public static class InfrastructureServiceCollectionExtensions
         services.AddScoped<ITenantDetailReader, TenantDetailReader>();
         services.AddScoped<ITenantWorkspaceReader, TenantWorkspaceReader>();
         services.AddScoped<ITenantUserDirectoryReader, TenantUserDirectoryReader>();
+        services.AddScoped<ITenantUserCreationService, TenantUserCreationService>();
         services.AddScoped<ITenantSourceOfTruthDirectoryReader, TenantSourceOfTruthDirectoryReader>();
+        services.AddScoped<ITenantSourceOfTruthCreationService, TenantSourceOfTruthCreationService>();
+        services.AddScoped<ITenantSourceOfTruthDetailReader, TenantSourceOfTruthDetailReader>();
         services.AddScoped<ITenantProjectDirectoryReader, TenantProjectDirectoryReader>();
+        services.AddScoped<ITenantProjectCreationService, TenantProjectCreationService>();
+        services.AddScoped<ITenantProjectDetailReader, TenantProjectDetailReader>();
         services.AddScoped<DomainIdentityMapper>();
 
         return services;

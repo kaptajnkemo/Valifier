@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Valifier.Domain.Identity;
+using Valifier.Domain.Knowledge;
 using Valifier.Domain.Recruitment;
 using Valifier.Domain.Tenancy;
 
@@ -20,6 +22,12 @@ public sealed class RecruitmentProjectConfiguration : IEntityTypeConfiguration<R
                 identifier => identifier == null ? (Guid?)null : identifier.Value.Value,
                 value => value.HasValue ? new TenantId(value.Value) : null);
 
+        builder.Property(project => project.OwnerUserId)
+            .HasConversion(identifier => identifier.Value, value => new UserId(value));
+
+        builder.Property(project => project.SourceOfTruthId)
+            .HasConversion(identifier => identifier.Value, value => new TenantSourceOfTruthId(value));
+
         builder.Property(project => project.Title)
             .HasMaxLength(200);
 
@@ -31,5 +39,7 @@ public sealed class RecruitmentProjectConfiguration : IEntityTypeConfiguration<R
             .HasMaxLength(32);
 
         builder.HasIndex(project => project.TenantId);
+        builder.HasIndex(project => project.OwnerUserId);
+        builder.HasIndex(project => project.SourceOfTruthId);
     }
 }

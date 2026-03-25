@@ -27,9 +27,16 @@
                         <strong>@sourceOfTruth.Name</strong>
                         <p>@sourceOfTruth.Topic</p>
                     </div>
-                    <span>@sourceOfTruth.SchemaVersion</span>
+                    <div>
+                        <span>@sourceOfTruth.SchemaVersion</span>
+                        <a class="vf-secondary-link" href="/tenant/sots/@sourceOfTruth.SourceOfTruthId">View source of truth</a>
+                    </div>
                 </li>
             }
         </ul>
     }
+
+    <div class="vf-action-row">
+        <a class="vf-primary-link" href="/tenant/sots/new">Create source of truth</a>
+    </div>
 </section>

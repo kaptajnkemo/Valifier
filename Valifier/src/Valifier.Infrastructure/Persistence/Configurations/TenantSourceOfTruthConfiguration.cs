@@ -28,5 +28,10 @@ public sealed class TenantSourceOfTruthConfiguration : IEntityTypeConfiguration<
             .HasMaxLength(64);
 
         builder.HasIndex(sourceOfTruth => sourceOfTruth.TenantId);
+
+        builder.HasMany(sourceOfTruth => sourceOfTruth.Entries)
+            .WithOne()
+            .HasForeignKey(entry => entry.SourceOfTruthId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

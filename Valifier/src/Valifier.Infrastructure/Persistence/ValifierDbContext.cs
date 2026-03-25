@@ -17,6 +17,8 @@ public sealed class ValifierDbContext : IdentityDbContext<ApplicationUser, Appli
 
     public DbSet<RecruitmentProject> RecruitmentProjects => Set<RecruitmentProject>();
 
+    public DbSet<TenantSourceOfTruthEntry> TenantSourceOfTruthEntries => Set<TenantSourceOfTruthEntry>();
+
     public DbSet<TenantSourceOfTruth> TenantSourceOfTruths => Set<TenantSourceOfTruth>();
 
     public DbSet<Tenant> Tenants => Set<Tenant>();

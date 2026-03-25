@@ -1,0 +1,48 @@
+@page "/tenant/sots/{sotId:guid}"
+@model Valifier.Web.Pages.Tenant.SourceOfTruthDetailsModel
+@{
+    ViewData["Title"] = "Source of truth detail";
+}
+
+<section class="vf-panel">
+    <div class="vf-eyebrow">Tenant workspace</div>
+    <h1>Source of truth detail</h1>
+
+    @if (Model.SourceOfTruth is null)
+    {
+        <p>Source of truth not found</p>
+    }
+    else
+    {
+        <dl class="vf-detail-grid">
+            <div>
+                <dt>Topic</dt>
+                <dd>@Model.SourceOfTruth.Topic</dd>
+            </div>
+            <div>
+                <dt>Name</dt>
+                <dd>@Model.SourceOfTruth.Name</dd>
+            </div>
+            <div>
+                <dt>Schema version</dt>
+                <dd>@Model.SourceOfTruth.SchemaVersion</dd>
+            </div>
+        </dl>
+
+        <ul class="vf-tenant-list">
+            @foreach (var entry in Model.SourceOfTruth.Entries)
+            {
+                <li class="vf-tenant-row">
+                    <div>
+                        <strong>@entry.Key</strong>
+                        <p>@entry.Label</p>
+                    </div>
+                    <div>
+                        <span>@entry.ValueType</span>
+                        <p>@entry.Value</p>
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+</section>
