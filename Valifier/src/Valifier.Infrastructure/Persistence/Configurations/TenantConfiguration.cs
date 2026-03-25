@@ -26,5 +26,7 @@ public sealed class TenantConfiguration : IEntityTypeConfiguration<Tenant>
 
         builder.Property(tenant => tenant.InitialSuperuserUserId)
             .HasConversion(identifier => identifier.Value, value => new UserId(value));
+
+        builder.Property(tenant => tenant.CollectedAtUtc);
     }
 }

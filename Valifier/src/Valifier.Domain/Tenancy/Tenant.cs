@@ -1,8 +1,9 @@
+using Valifier.Domain.Compliance;
 using Valifier.Domain.Identity;
 
 namespace Valifier.Domain.Tenancy;
 
-public sealed class Tenant
+public sealed class Tenant : IGovernedRecord
 {
     public Tenant(
         TenantId id,
@@ -10,7 +11,8 @@ public sealed class Tenant
         string initialSuperuserDisplayName,
         string initialSuperuserEmail,
         UserId initialSuperuserUserId,
-        bool initialSuperuserHasSignedIn = false)
+        bool initialSuperuserHasSignedIn = false,
+        DateTimeOffset? collectedAtUtc = null)
     {
         if (string.IsNullOrWhiteSpace(name))
         {
@@ -33,6 +35,7 @@ public sealed class Tenant
         InitialSuperuserEmail = initialSuperuserEmail.Trim();
         InitialSuperuserUserId = initialSuperuserUserId;
         InitialSuperuserHasSignedIn = initialSuperuserHasSignedIn;
+        CollectedAtUtc = collectedAtUtc ?? DateTimeOffset.UtcNow;
     }
 
     private Tenant()
@@ -42,6 +45,7 @@ public sealed class Tenant
         InitialSuperuserDisplayName = string.Empty;
         InitialSuperuserEmail = string.Empty;
         InitialSuperuserUserId = new UserId(Guid.Empty);
+        CollectedAtUtc = DateTimeOffset.UtcNow;
     }
 
     public TenantId Id { get; private set; }
@@ -56,8 +60,40 @@ public sealed class Tenant
 
     public bool InitialSuperuserHasSignedIn { get; private set; }
 
+    public DateTimeOffset CollectedAtUtc { get; private set; }
+
     public void MarkInitialSuperuserSignedIn()
     {
         InitialSuperuserHasSignedIn = true;
+    }
+
+    public string GetRecordIdentifier()
+    {
+        return Id.Value.ToString("D");
+    }
+
+    public string GetRecordType()
+    {
+        return "Tenant";
+    }
+
+    public DateTimeOffset GetCollectionTimestamp()
+    {
+        return CollectedAtUtc;
+    }
+
+    public string GetDataCategoryCode()
+    {
+        return "TENANT-PROFILE";
+    }
+
+    public string GetRetentionRuleCode()
+    {
+        return "TENANT-ACCOUNT";
+    }
+
+    public string GetSubjectScope()
+    {
+        return "Tenant";
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Valifier.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using Valifier.Infrastructure.Persistence;
 namespace Valifier.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ValifierDbContext))]
-    partial class ValifierDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260324163522_Epic2ComplianceGovernance")]
+    partial class Epic2ComplianceGovernance
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

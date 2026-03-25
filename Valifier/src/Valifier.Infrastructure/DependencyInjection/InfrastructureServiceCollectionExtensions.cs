@@ -1,8 +1,11 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Valifier.Application.Features.Compliance;
 using Valifier.Application.Features.Dashboard;
+using Valifier.Application.Features.PrivacyRequests;
 using Valifier.Application.Features.Tenants.AdminDashboard;
 using Valifier.Application.Features.Tenants.Provisioning;
 using Valifier.Application.Features.Tenants.SignInTracking;
@@ -22,7 +25,14 @@ public static class InfrastructureServiceCollectionExtensions
         var connectionString = configuration.GetConnectionString("DefaultConnection")
             ?? throw new InvalidOperationException("Connection string 'DefaultConnection' was not configured.");
 
-        services.AddDbContext<ValifierDbContext>(options => options.UseSqlServer(connectionString));
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        services.AddScoped<ICurrentAuditContextAccessor, HttpCurrentAuditContextAccessor>();
+        services.AddScoped<TransactionAuditSaveChangesInterceptor>();
+        services.AddDbContext<ValifierDbContext>((serviceProvider, options) =>
+        {
+            options.UseSqlServer(connectionString);
+            options.AddInterceptors(serviceProvider.GetRequiredService<TransactionAuditSaveChangesInterceptor>());
+        });
 
         services.AddIdentityCore<ApplicationUser>(options =>
             {
@@ -37,7 +47,10 @@ public static class InfrastructureServiceCollectionExtensions
             .AddEntityFrameworkStores<ValifierDbContext>();
 
         services.Configure<BootstrapIdentityOptions>(configuration.GetSection("BootstrapIdentity"));
+        services.AddScoped<IComplianceMetadataReader, ComplianceMetadataReader>();
         services.AddScoped<IPlatformOverviewReader, PlatformOverviewReader>();
+        services.AddScoped<IPrivacyRequestReader, PrivacyRequestReader>();
+        services.AddScoped<IPrivacyRequestService, PrivacyRequestService>();
         services.AddScoped<IAdminDashboardReader, AdminDashboardReader>();
         services.AddScoped<ITenantProvisioningService, TenantProvisioningService>();
         services.AddScoped<IInitialTenantSignInRecorder, InitialTenantSignInRecorder>();

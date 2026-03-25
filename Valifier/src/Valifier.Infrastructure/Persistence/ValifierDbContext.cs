@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Valifier.Domain.Compliance;
 using Valifier.Domain.Recruitment;
 using Valifier.Domain.Tenancy;
 using Valifier.Infrastructure.Identity;
@@ -16,6 +17,10 @@ public sealed class ValifierDbContext : IdentityDbContext<ApplicationUser, Appli
     public DbSet<RecruitmentProject> RecruitmentProjects => Set<RecruitmentProject>();
 
     public DbSet<Tenant> Tenants => Set<Tenant>();
+
+    public DbSet<PrivacyRequest> PrivacyRequests => Set<PrivacyRequest>();
+
+    public DbSet<TransactionAuditRecord> TransactionAuditRecords => Set<TransactionAuditRecord>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
