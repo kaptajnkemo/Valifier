@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Valifier.Domain.Compliance;
+using Valifier.Domain.Knowledge;
 using Valifier.Domain.Recruitment;
 using Valifier.Domain.Tenancy;
 using Valifier.Infrastructure.Identity;
@@ -15,6 +16,10 @@ public sealed class ValifierDbContext : IdentityDbContext<ApplicationUser, Appli
     }
 
     public DbSet<RecruitmentProject> RecruitmentProjects => Set<RecruitmentProject>();
+
+    public DbSet<TenantSourceOfTruthEntry> TenantSourceOfTruthEntries => Set<TenantSourceOfTruthEntry>();
+
+    public DbSet<TenantSourceOfTruth> TenantSourceOfTruths => Set<TenantSourceOfTruth>();
 
     public DbSet<Tenant> Tenants => Set<Tenant>();
 

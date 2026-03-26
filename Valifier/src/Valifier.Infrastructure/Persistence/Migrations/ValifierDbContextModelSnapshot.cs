@@ -196,6 +196,71 @@ namespace Valifier.Infrastructure.Persistence.Migrations
                     b.ToTable("TransactionAuditRecords", (string)null);
                 });
 
+            modelBuilder.Entity("Valifier.Domain.Knowledge.TenantSourceOfTruth", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("SchemaVersion")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Topic")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("TenantSourceOfTruths", (string)null);
+                });
+
+            modelBuilder.Entity("Valifier.Domain.Knowledge.TenantSourceOfTruthEntry", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Label")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)");
+
+                    b.Property<Guid>("SourceOfTruthId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("ValueType")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SourceOfTruthId");
+
+                    b.ToTable("TenantSourceOfTruthEntries", (string)null);
+                });
+
             modelBuilder.Entity("Valifier.Domain.Recruitment.RecruitmentProject", b =>
                 {
                     b.Property<Guid>("Id")
@@ -209,10 +274,19 @@ namespace Valifier.Infrastructure.Persistence.Migrations
                         .HasMaxLength(120)
                         .HasColumnType("nvarchar(120)");
 
+                    b.Property<Guid>("OwnerUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SourceOfTruthId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasMaxLength(32)
                         .HasColumnType("nvarchar(32)");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -220,6 +294,12 @@ namespace Valifier.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OwnerUserId");
+
+                    b.HasIndex("SourceOfTruthId");
+
+                    b.HasIndex("TenantId");
 
                     b.ToTable("RecruitmentProjects", (string)null);
                 });
@@ -412,6 +492,20 @@ namespace Valifier.Infrastructure.Persistence.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Valifier.Domain.Knowledge.TenantSourceOfTruthEntry", b =>
+                {
+                    b.HasOne("Valifier.Domain.Knowledge.TenantSourceOfTruth", null)
+                        .WithMany("Entries")
+                        .HasForeignKey("SourceOfTruthId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Valifier.Domain.Knowledge.TenantSourceOfTruth", b =>
+                {
+                    b.Navigation("Entries");
                 });
 #pragma warning restore 612, 618
         }

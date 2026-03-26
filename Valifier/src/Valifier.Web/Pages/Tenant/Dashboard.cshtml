@@ -6,6 +6,7 @@
 
 <section class="vf-panel">
     <div class="vf-eyebrow">Tenant workspace</div>
+    <partial name="_WorkspaceNavigation" model='Valifier.Web.Pages.Shared.Navigation.TenantWorkspaceNavigation.ForDashboard(User)' />
     <h1>Tenant dashboard</h1>
 
     @if (Model.Workspace is null)
@@ -14,6 +15,35 @@
     }
     else
     {
+        <div class="vf-detail-grid">
+            <div class="vf-stat-card">
+                <span>Total tenant users</span>
+                <strong data-testid="tenant-user-count-value">@Model.Workspace.TotalTenantUsers</strong>
+            </div>
+            <div class="vf-stat-card">
+                <span>Total sources of truth</span>
+                <strong data-testid="tenant-source-of-truth-count-value">@Model.Workspace.TotalTenantSourcesOfTruth</strong>
+            </div>
+            <div class="vf-stat-card">
+                <span>Total recruitment projects</span>
+                <strong data-testid="tenant-project-count-value">@Model.Workspace.TotalTenantProjects</strong>
+            </div>
+        </div>
+
+        <div class="vf-action-row">
+            @if (Model.CanManageTenantUsers)
+            {
+                <a class="vf-primary-link" href="/tenant/users">Users</a>
+            }
+
+            @if (Model.CanManageTenantSourcesOfTruth)
+            {
+                <a class="vf-primary-link" href="/tenant/sots">Sources of truth</a>
+            }
+
+            <a class="vf-primary-link" href="/tenant/projects">Projects</a>
+        </div>
+
         <dl class="vf-detail-grid">
             <div>
                 <dt>Tenant name</dt>

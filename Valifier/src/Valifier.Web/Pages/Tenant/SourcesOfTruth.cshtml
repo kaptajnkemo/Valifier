@@ -1,0 +1,43 @@
+@page "/tenant/sots"
+@model Valifier.Web.Pages.Tenant.SourcesOfTruthModel
+@{
+    ViewData["Title"] = "Tenant sources of truth";
+}
+
+<section class="vf-panel">
+    <div class="vf-eyebrow">Tenant workspace</div>
+    <partial name="_WorkspaceNavigation" model='Valifier.Web.Pages.Shared.Navigation.TenantWorkspaceNavigation.ForSourcesOfTruth()' />
+    <h1>Sources of truth</h1>
+
+    <div class="vf-stat-card">
+        <span>Total sources of truth</span>
+        <strong>@Model.Directory.TotalSourcesOfTruth</strong>
+    </div>
+
+    @if (Model.Directory.TotalSourcesOfTruth == 0)
+    {
+        <p>No sources of truth found</p>
+    }
+    else
+    {
+        <ul class="vf-tenant-list">
+            @foreach (var sourceOfTruth in Model.Directory.SourcesOfTruth)
+            {
+                <li class="vf-tenant-row" data-testid="tenant-source-of-truth-row">
+                    <div>
+                        <strong>@sourceOfTruth.Name</strong>
+                        <p>@sourceOfTruth.Topic</p>
+                    </div>
+                    <div>
+                        <span>@sourceOfTruth.SchemaVersion</span>
+                        <a class="vf-secondary-link" href="/tenant/sots/@sourceOfTruth.SourceOfTruthId">View source of truth</a>
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+
+    <div class="vf-action-row">
+        <a class="vf-primary-link" href="/tenant/sots/new">Create source of truth</a>
+    </div>
+</section>

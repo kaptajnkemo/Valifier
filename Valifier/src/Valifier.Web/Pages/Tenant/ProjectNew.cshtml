@@ -1,0 +1,52 @@
+@page "/tenant/projects/new"
+@model Valifier.Web.Pages.Tenant.ProjectNewModel
+@{
+    ViewData["Title"] = "Create project";
+}
+
+<section class="vf-panel">
+    <div class="vf-eyebrow">Tenant workspace</div>
+    <partial name="_WorkspaceNavigation" model='Valifier.Web.Pages.Shared.Navigation.TenantWorkspaceNavigation.ForProjectCreate()' />
+    <h1>Create project</h1>
+
+    <form method="post" class="vf-form">
+        <div asp-validation-summary="ModelOnly" class="vf-validation"></div>
+
+        <label class="vf-field">
+            <span>Job title</span>
+            <input asp-for="Input.JobTitle" />
+        </label>
+
+        <label class="vf-field">
+            <span>Department</span>
+            <input asp-for="Input.Department" />
+        </label>
+
+        @if (Model.ShowOwnerSelection)
+        {
+            <label class="vf-field">
+                <span>Hiring Manager owner</span>
+                <select asp-for="Input.OwnerUserId">
+                    <option value="">Select Hiring Manager owner</option>
+                    @foreach (var option in Model.OwnerOptions)
+                    {
+                        <option value="@option.Value">@option.Label</option>
+                    }
+                </select>
+            </label>
+        }
+
+        <label class="vf-field">
+            <span>Source of truth</span>
+            <select asp-for="Input.SourceOfTruthId">
+                <option value="">Select source of truth</option>
+                @foreach (var option in Model.SourceOfTruthOptions)
+                {
+                    <option value="@option.Value">@option.Label</option>
+                }
+            </select>
+        </label>
+
+        <button class="vf-primary-button" type="submit">Create project</button>
+    </form>
+</section>

@@ -1,0 +1,40 @@
+@page "/tenant/users"
+@model Valifier.Web.Pages.Tenant.UsersModel
+@{
+    ViewData["Title"] = "Tenant users";
+}
+
+<section class="vf-panel">
+    <div class="vf-eyebrow">Tenant workspace</div>
+    <partial name="_WorkspaceNavigation" model='Valifier.Web.Pages.Shared.Navigation.TenantWorkspaceNavigation.ForUsers()' />
+    <h1>Tenant users</h1>
+
+    <div class="vf-stat-card">
+        <span>Total tenant users</span>
+        <strong>@Model.Directory.TotalUsers</strong>
+    </div>
+
+    @if (Model.Directory.TotalUsers == 0)
+    {
+        <p>No tenant users found</p>
+    }
+    else
+    {
+        <ul class="vf-tenant-list">
+            @foreach (var user in Model.Directory.Users)
+            {
+                <li class="vf-tenant-row" data-testid="tenant-user-row">
+                    <div>
+                        <strong>@user.DisplayName</strong>
+                        <p>@user.Email</p>
+                    </div>
+                    <span>@user.RoleName</span>
+                </li>
+            }
+        </ul>
+    }
+
+    <div class="vf-action-row">
+        <a class="vf-primary-link" href="/tenant/users/new">Create Hiring Manager</a>
+    </div>
+</section>

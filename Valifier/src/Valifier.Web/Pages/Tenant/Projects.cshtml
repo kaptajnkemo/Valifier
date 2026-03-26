@@ -1,0 +1,44 @@
+@page "/tenant/projects"
+@model Valifier.Web.Pages.Tenant.ProjectsModel
+@{
+    ViewData["Title"] = "Tenant projects";
+}
+
+<section class="vf-panel">
+    <div class="vf-eyebrow">Tenant workspace</div>
+    <partial name="_WorkspaceNavigation" model='Valifier.Web.Pages.Shared.Navigation.TenantWorkspaceNavigation.ForProjects(User)' />
+    <h1>Projects</h1>
+
+    <div class="vf-stat-card">
+        <span>Total recruitment projects</span>
+        <strong>@Model.Directory.TotalProjects</strong>
+    </div>
+
+    @if (Model.Directory.TotalProjects == 0)
+    {
+        <p>No recruitment projects found</p>
+    }
+    else
+    {
+        <ul class="vf-tenant-list">
+            @foreach (var project in Model.Directory.Projects)
+            {
+                <li class="vf-tenant-row" data-testid="tenant-project-row">
+                    <div>
+                        <strong>@project.Title</strong>
+                        <p>@project.Department</p>
+                    </div>
+                    <div>
+                        <span>@project.OwnerDisplayName</span>
+                        <p>@project.Status</p>
+                        <a class="vf-secondary-link" href="/tenant/projects/@project.ProjectId">View project</a>
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+
+    <div class="vf-action-row">
+        <a class="vf-primary-link" href="/tenant/projects/new">Create project</a>
+    </div>
+</section>

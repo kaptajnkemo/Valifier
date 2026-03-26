@@ -1,0 +1,81 @@
+@page "/tenant/sots/new"
+@model Valifier.Web.Pages.Tenant.SourceOfTruthNewModel
+@{
+    ViewData["Title"] = "Create source of truth";
+}
+
+<section class="vf-panel">
+    <div class="vf-eyebrow">Tenant workspace</div>
+    <partial name="_WorkspaceNavigation" model='Valifier.Web.Pages.Shared.Navigation.TenantWorkspaceNavigation.ForSourceOfTruthCreate()' />
+    <h1>Create source of truth</h1>
+
+    <form method="post" class="vf-form">
+        <div asp-validation-summary="ModelOnly" class="vf-validation"></div>
+
+        <input name="Input.EntriesJson" type="hidden" value="@Model.Input.EntriesJson" />
+
+        <label class="vf-field">
+            <span>Topic</span>
+            <input asp-for="Input.Topic" />
+        </label>
+
+        <label class="vf-field">
+            <span>Name</span>
+            <input asp-for="Input.Name" />
+        </label>
+
+        <label class="vf-field">
+            <span>Schema version</span>
+            <input asp-for="Input.SchemaVersion" />
+        </label>
+
+        <label class="vf-field">
+            <span>Entry key</span>
+            <input asp-for="Input.EntryKey" />
+        </label>
+
+        <label class="vf-field">
+            <span>Entry label</span>
+            <input asp-for="Input.EntryLabel" />
+        </label>
+
+        <label class="vf-field">
+            <span>Entry value type</span>
+            <select asp-for="Input.EntryValueType">
+                <option value="">Select value type</option>
+                <option value="Text">Text</option>
+                <option value="Number">Number</option>
+                <option value="Boolean">Boolean</option>
+            </select>
+        </label>
+
+        <label class="vf-field">
+            <span>Entry value</span>
+            <input asp-for="Input.EntryValue" />
+        </label>
+
+        <div class="vf-action-row">
+            <button class="vf-secondary-link" type="submit" asp-page-handler="AddEntry">Add entry</button>
+            <button class="vf-primary-button" type="submit" asp-page-handler="Save">Save source of truth</button>
+        </div>
+    </form>
+
+    @if (Model.Entries.Count > 0)
+    {
+        <ul class="vf-tenant-list">
+            @foreach (var entry in Model.Entries)
+            {
+                <li class="vf-tenant-row" data-testid="tenant-source-of-truth-entry-row">
+                    <div>
+                        <strong>@entry.Key</strong>
+                        <p>@entry.Label</p>
+                    </div>
+                    <div>
+                        <span>@entry.ValueType</span>
+                        <p>@entry.Value</p>
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+</section>

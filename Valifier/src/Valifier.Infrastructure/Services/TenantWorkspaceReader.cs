@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Valifier.Domain.Knowledge;
 using Valifier.Application.Features.Tenants.TenantWorkspace;
 using Valifier.Domain.Tenancy;
 using Valifier.Infrastructure.Persistence;
@@ -32,11 +33,22 @@ public sealed class TenantWorkspaceReader : ITenantWorkspaceReader
 
         var tenant = await _dbContext.Tenants
             .Where(candidate => candidate.Id == new TenantId(user.TenantId.Value))
-            .Select(candidate => candidate.Name)
+            .Select(candidate => new
+            {
+                candidate.Name,
+                TotalTenantUsers = _dbContext.Users.Count(tenantUser => tenantUser.TenantId == user.TenantId.Value),
+                TotalTenantSourcesOfTruth = _dbContext.TenantSourceOfTruths.Count(sourceOfTruth => sourceOfTruth.TenantId == candidate.Id),
+                TotalTenantProjects = _dbContext.RecruitmentProjects.Count(project => project.TenantId == candidate.Id)
+            })
             .SingleOrDefaultAsync(cancellationToken);
 
         return tenant is null || string.IsNullOrWhiteSpace(user.Email)
             ? null
-            : new TenantWorkspaceView(tenant, user.Email);
+            : new TenantWorkspaceView(
+                tenant.Name,
+                user.Email,
+                tenant.TotalTenantUsers,
+                tenant.TotalTenantSourcesOfTruth,
+                tenant.TotalTenantProjects);
     }
 }

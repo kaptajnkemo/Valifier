@@ -1,0 +1,32 @@
+@page "/tenant/users/new"
+@model Valifier.Web.Pages.Tenant.UsersNewModel
+@{
+    ViewData["Title"] = "Create Hiring Manager";
+}
+
+<section class="vf-panel">
+    <div class="vf-eyebrow">Tenant workspace</div>
+    <partial name="_WorkspaceNavigation" model='Valifier.Web.Pages.Shared.Navigation.TenantWorkspaceNavigation.ForUsersCreate()' />
+    <h1>Create Hiring Manager</h1>
+
+    <form method="post" class="vf-form">
+        <div asp-validation-summary="ModelOnly" class="vf-validation"></div>
+
+        <label class="vf-field">
+            <span>Display name</span>
+            <input asp-for="Input.DisplayName" />
+        </label>
+
+        <label class="vf-field">
+            <span>Email address</span>
+            <input asp-for="Input.Email" type="email" />
+        </label>
+
+        <label class="vf-field">
+            <span>Password</span>
+            <input asp-for="Input.Password" type="password" />
+        </label>
+
+        <button class="vf-primary-button" type="submit">Create Hiring Manager</button>
+    </form>
+</section>

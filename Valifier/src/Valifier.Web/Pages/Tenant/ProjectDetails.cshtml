@@ -1,0 +1,37 @@
+@page "/tenant/projects/{projectId:guid}"
+@model Valifier.Web.Pages.Tenant.ProjectDetailsModel
+@{
+    ViewData["Title"] = "Project detail";
+}
+
+<section class="vf-panel">
+    <div class="vf-eyebrow">Tenant workspace</div>
+    <partial name="_WorkspaceNavigation" model='Valifier.Web.Pages.Shared.Navigation.TenantWorkspaceNavigation.ForProjectDetails()' />
+    <h1>Project detail</h1>
+
+    @if (Model.Project is null)
+    {
+        <p>Project not found</p>
+    }
+    else
+    {
+        <dl class="vf-detail-grid">
+            <div>
+                <dt>Job title</dt>
+                <dd>@Model.Project.Title</dd>
+            </div>
+            <div>
+                <dt>Department</dt>
+                <dd>@Model.Project.Department</dd>
+            </div>
+            <div>
+                <dt>Hiring Manager owner</dt>
+                <dd>@Model.Project.OwnerDisplayName</dd>
+            </div>
+            <div>
+                <dt>Source of truth</dt>
+                <dd>@Model.Project.SourceOfTruthName</dd>
+            </div>
+        </dl>
+    }
+</section>

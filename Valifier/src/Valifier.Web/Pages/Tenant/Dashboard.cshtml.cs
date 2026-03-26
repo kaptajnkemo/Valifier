@@ -8,7 +8,7 @@ using Valifier.Infrastructure.Identity;
 
 namespace Valifier.Web.Pages.Tenant;
 
-[Authorize(Roles = RoleNames.Superuser)]
+[Authorize(Roles = RoleNames.TenantWorkspaceRoles)]
 public sealed class DashboardModel : PageModel
 {
     private readonly GetTenantWorkspaceQueryHandler _handler;
@@ -39,4 +39,8 @@ public sealed class DashboardModel : PageModel
             ? Redirect("/sign-in")
             : Page();
     }
+
+    public bool CanManageTenantUsers => User.IsInRole(RoleNames.Superuser);
+
+    public bool CanManageTenantSourcesOfTruth => User.IsInRole(RoleNames.Superuser);
 }
