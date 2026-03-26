@@ -507,3 +507,196 @@
     7. **AT7 - Browser workflow with a Hiring Manager session navigates from `/tenant/dashboard` to `/tenant/projects`, to `/tenant/projects/{projectId}`, returns to `/tenant/projects`, and returns to `/tenant/dashboard` by activating visible in-app navigation actions only**
   - **Explicit Non-Goals (OUT OF SCOPE):** Browser-history support. Candidate-facing navigation. New domain workflows. Global redesign of authenticated layouts outside the current pages.
   - **Status:** Completed 2026-03-26.
+
+### **EPIC-5: AI Governance, Cost Attribution, SoT Ingestion, and Candidate Designer Bootstrap**
+- **Category:** USER-FACING
+- *Objective: Establish the first governed AI workflow by allowing Global Admins to control which AI models are available and inspect attributable AI usage and cost, allowing tenant superusers to upload text files and save AI-generated sources of truth, and allowing Hiring Managers to use selected sources of truth to generate and save project ICPs.*
+
+- [ ] **SIP-5.1: Global Admin can configure available AI models for governed workflows**
+  - **Summary:** The route `/admin/ai` allows a Global Admin to enable and disable AI models for source-of-truth ingestion and Candidate Designer workflows.
+  - **Objective (WHY):** AI execution must be governed by Global Admins before tenant and project workflows depend on model availability.
+  - **Scope Guard:** This SIP authorizes only the changes strictly required to satisfy the acceptance criteria. Incidental fixes, cleanups, refactors, or improvements outside the described change are not permitted.
+  - **Dependencies:** SIP-1.2, SIP-4.1.
+  - **Scope & Acceptance Criteria (WHAT must be true):**
+    1. The route `/admin/ai` is reachable by activating a visible `AI governance` action on `/admin/dashboard`.
+    2. Browser view of `/admin/ai` with an authenticated Global Admin session displays one model list row per available AI model.
+    3. Each model list row on `/admin/ai` displays one availability control for `Source of truth ingestion`.
+    4. Each model list row on `/admin/ai` displays one availability control for `Candidate Designer`.
+    5. Submission of a valid availability change on `/admin/ai` remains on `/admin/ai`.
+    6. Browser revisit of `/admin/ai` after a valid availability change shows the saved model availability state.
+    7. A model disabled for `Source of truth ingestion` does not appear as a selectable model on `/tenant/sots/upload`.
+    8. A model disabled for `Candidate Designer` does not appear as a selectable model on `/tenant/projects/{projectId}/candidate-designer`.
+    9. Browser view of `/admin/ai` with an authenticated Global Admin session displays a visible `Back to dashboard` action that opens `/admin/dashboard`.
+    10. A request to `/admin/ai` without an authenticated Global Admin session redirects to `/sign-in`.
+  - **Acceptance Tests (THIS must work):**
+    1. **AT1 - Browser activation of the visible `AI governance` action on `/admin/dashboard` opens `/admin/ai`**
+    2. **AT2 - Browser view of `/admin/ai` with an authenticated Global Admin session shows one model list row per available AI model**
+    3. **AT3 - Browser view of one model list row on `/admin/ai` shows one availability control for `Source of truth ingestion`**
+    4. **AT4 - Browser view of one model list row on `/admin/ai` shows one availability control for `Candidate Designer`**
+    5. **AT5 - Browser submission of a valid availability change on `/admin/ai` remains on `/admin/ai`**
+    6. **AT6 - Browser revisit of `/admin/ai` after a valid availability change shows the saved model availability state**
+    7. **AT7 - Browser view of `/tenant/sots/upload` after a model is disabled for `Source of truth ingestion` does not show that model as a selectable model**
+    8. **AT8 - Browser view of `/tenant/projects/{projectId}/candidate-designer` after a model is disabled for `Candidate Designer` does not show that model as a selectable model**
+    9. **AT9 - Browser activation of the visible `Back to dashboard` action on `/admin/ai` opens `/admin/dashboard`**
+    10. **AT10 - Browser navigation to `/admin/ai` without an authenticated Global Admin session redirects to `/sign-in`**
+  - **Explicit Non-Goals (OUT OF SCOPE):** Provider failover policy. Prompt editing. Tenant-specific model overrides. Candidate-facing AI configuration.
+  - **Status:** Planned 2026-03-26.
+
+- [ ] **SIP-5.2: Global Admin can inspect attributable AI usage and cost**
+  - **Summary:** The route `/admin/ai` displays attributable AI usage and cost for governed workflows by period, model, tenant, and project.
+  - **Objective (WHY):** AI token spend must be attributable to workflow usage so the platform can control expenses and support billing evidence.
+  - **Scope Guard:** This SIP authorizes only the changes strictly required to satisfy the acceptance criteria. Incidental fixes, cleanups, refactors, or improvements outside the described change are not permitted.
+  - **Dependencies:** SIP-5.1, SIP-5.3, SIP-5.4.
+  - **Scope & Acceptance Criteria (WHAT must be true):**
+    1. Browser view of `/admin/ai` with an authenticated Global Admin session displays daily totals for AI request count, input tokens, output tokens, total tokens, and estimated cost.
+    2. Browser view of `/admin/ai` with an authenticated Global Admin session displays weekly totals for AI request count, input tokens, output tokens, total tokens, and estimated cost.
+    3. Browser view of `/admin/ai` with an authenticated Global Admin session displays monthly totals for AI request count, input tokens, output tokens, total tokens, and estimated cost.
+    4. Browser view of `/admin/ai` with an authenticated Global Admin session displays one visible trendline for the selected reporting period.
+    5. Browser view of `/admin/ai` with an authenticated Global Admin session displays one usage list row per AI request in the filtered result.
+    6. Each usage list row on `/admin/ai` displays tenant identifier, project identifier or `None`, workflow name, model name, request timestamp, input tokens, output tokens, total tokens, and estimated cost.
+    7. Browser view of `/admin/ai` allows filtering the usage list by tenant, project, workflow, and model.
+    8. Browser view of `/admin/ai` after one source-of-truth ingestion request shows one usage list row with the workflow name `Source of truth ingestion`.
+    9. Browser view of `/admin/ai` after one Candidate Designer request shows one usage list row with the workflow name `Candidate Designer`.
+    10. A request to `/admin/ai` without an authenticated Global Admin session redirects to `/sign-in`.
+  - **Acceptance Tests (THIS must work):**
+    1. **AT1 - Browser view of `/admin/ai` with an authenticated Global Admin session shows daily totals for AI request count, input tokens, output tokens, total tokens, and estimated cost**
+    2. **AT2 - Browser view of `/admin/ai` with an authenticated Global Admin session shows weekly totals for AI request count, input tokens, output tokens, total tokens, and estimated cost**
+    3. **AT3 - Browser view of `/admin/ai` with an authenticated Global Admin session shows monthly totals for AI request count, input tokens, output tokens, total tokens, and estimated cost**
+    4. **AT4 - Browser view of `/admin/ai` with an authenticated Global Admin session shows one visible trendline for the selected reporting period**
+    5. **AT5 - Browser view of one usage list row on `/admin/ai` shows tenant identifier, project identifier or `None`, workflow name, model name, request timestamp, input tokens, output tokens, total tokens, and estimated cost**
+    6. **AT6 - Browser activation of tenant, project, workflow, and model filters on `/admin/ai` filters the usage list**
+    7. **AT7 - Browser view of `/admin/ai` after one source-of-truth ingestion request shows one usage list row with the workflow name `Source of truth ingestion`**
+    8. **AT8 - Browser view of `/admin/ai` after one Candidate Designer request shows one usage list row with the workflow name `Candidate Designer`**
+    9. **AT9 - Browser navigation to `/admin/ai` without an authenticated Global Admin session redirects to `/sign-in`**
+  - **Explicit Non-Goals (OUT OF SCOPE):** Invoice generation. Payment collection. Tenant-facing AI cost dashboards. Non-AI platform cost reporting.
+  - **Status:** Planned 2026-03-26.
+
+- [ ] **SIP-5.3: Tenant superuser can upload text and save an AI-generated source of truth**
+  - **Summary:** The route `/tenant/sots/upload` allows a tenant superuser to upload a text file, review an AI-generated source-of-truth draft, and save it as a tenant-scoped source of truth.
+  - **Objective (WHY):** Manual source-of-truth entry must be supplemented by a usable ingestion path before Candidate Designer can rely on tenant context at scale.
+  - **Scope Guard:** This SIP authorizes only the changes strictly required to satisfy the acceptance criteria. Incidental fixes, cleanups, refactors, or improvements outside the described change are not permitted.
+  - **Dependencies:** SIP-3.3, SIP-4.2, SIP-5.1.
+  - **Scope & Acceptance Criteria (WHAT must be true):**
+    1. The route `/tenant/sots/upload` is reachable by activating a visible `Upload source material` action on `/tenant/sots` with a tenant-superuser session.
+    2. Browser view of `/tenant/sots/upload` with a tenant-superuser session displays a file-upload control, a topic input, a name input, a model selection, a `Generate draft` action, and a `Save source of truth` action.
+    3. The model selection on `/tenant/sots/upload` displays AI models enabled for `Source of truth ingestion` only.
+    4. Submission of a valid text file, topic value, name value, and model value on `/tenant/sots/upload` remains on `/tenant/sots/upload`.
+    5. Browser view of `/tenant/sots/upload` after a valid generation request shows one draft source of truth with topic, name, schema version, and one entry list row per generated entry.
+    6. Each generated entry list row on `/tenant/sots/upload` displays key, label, value type, and value.
+    7. Submission of a valid generated draft on `/tenant/sots/upload` redirects to `/tenant/sots`.
+    8. Browser view of `/tenant/sots` after a valid generated draft is saved shows one source-of-truth list row with the generated topic and generated name.
+    9. Browser view of `/tenant/sots/upload` with a tenant-superuser session displays a visible `Back to sources of truth` action that opens `/tenant/sots`.
+    10. Submission of `/tenant/sots/upload` with a missing file remains on `/tenant/sots/upload`.
+    11. A request to `/tenant/sots/upload` with an authenticated Hiring Manager session redirects to `/sign-in`.
+    12. A request to `/tenant/sots/upload` without an authenticated session redirects to `/sign-in`.
+  - **Acceptance Tests (THIS must work):**
+    1. **AT1 - Browser activation of the visible `Upload source material` action on `/tenant/sots` with a tenant-superuser session opens `/tenant/sots/upload`**
+    2. **AT2 - Browser view of `/tenant/sots/upload` with a tenant-superuser session shows a file-upload control, a topic input, a name input, a model selection, a `Generate draft` action, and a `Save source of truth` action**
+    3. **AT3 - Browser view of the model selection on `/tenant/sots/upload` shows AI models enabled for `Source of truth ingestion` only**
+    4. **AT4 - Browser submission of a valid text file, topic value, name value, and model value on `/tenant/sots/upload` remains on `/tenant/sots/upload`**
+    5. **AT5 - Browser view of `/tenant/sots/upload` after a valid generation request shows one draft source of truth with topic, name, schema version, and one entry list row per generated entry**
+    6. **AT6 - Browser view of one generated entry list row on `/tenant/sots/upload` shows key, label, value type, and value**
+    7. **AT7 - Browser submission of a valid generated draft on `/tenant/sots/upload` redirects to `/tenant/sots`**
+    8. **AT8 - Browser view of `/tenant/sots` after a valid generated draft is saved shows one source-of-truth list row with the generated topic and generated name**
+    9. **AT9 - Browser activation of the visible `Back to sources of truth` action on `/tenant/sots/upload` opens `/tenant/sots`**
+    10. **AT10 - Browser submission of `/tenant/sots/upload` with a missing file remains on `/tenant/sots/upload`**
+    11. **AT11 - Browser navigation to `/tenant/sots/upload` with an authenticated Hiring Manager session redirects to `/sign-in`**
+    12. **AT12 - Browser navigation to `/tenant/sots/upload` without an authenticated session redirects to `/sign-in`**
+  - **Explicit Non-Goals (OUT OF SCOPE):** Source-of-truth editing after generation. Non-text file formats. Multi-file ingestion. Topic-specific source-of-truth templates.
+  - **Status:** Planned 2026-03-26.
+
+- [ ] **SIP-5.4: Hiring Manager can generate and save an ICP from selected sources of truth**
+  - **Summary:** The routes `/tenant/projects/{projectId}/candidate-designer` and `/tenant/projects/{projectId}/icp` allow the project owner Hiring Manager to generate and save an ICP from selected sources of truth.
+  - **Objective (WHY):** The project owner must be able to produce the project ICP before downstream candidate-facing and evaluation workflows can begin.
+  - **Scope Guard:** This SIP authorizes only the changes strictly required to satisfy the acceptance criteria. Incidental fixes, cleanups, refactors, or improvements outside the described change are not permitted.
+  - **Dependencies:** SIP-3.4, SIP-4.3, SIP-5.1, SIP-5.3.
+  - **Scope & Acceptance Criteria (WHAT must be true):**
+    1. The route `/tenant/projects/{projectId}/candidate-designer` is reachable by activating a visible `Define ICP` action on `/tenant/projects/{projectId}` with the project owner Hiring Manager session.
+    2. Browser view of `/tenant/projects/{projectId}/candidate-designer` with the project owner Hiring Manager session displays the project title, a source-of-truth multiselection, a model selection, a design prompt input, a `Generate ICP` action, and a `Save ICP` action.
+    3. The source-of-truth multiselection on `/tenant/projects/{projectId}/candidate-designer` displays tenant sources of truth only.
+    4. The model selection on `/tenant/projects/{projectId}/candidate-designer` displays AI models enabled for `Candidate Designer` only.
+    5. Submission of valid selected sources of truth, model value, and design prompt value on `/tenant/projects/{projectId}/candidate-designer` remains on `/tenant/projects/{projectId}/candidate-designer`.
+    6. Browser view of `/tenant/projects/{projectId}/candidate-designer` after a valid generation request shows one draft ICP with required competencies, experience expectations, success criteria, personal traits, and evaluation parameters.
+    7. Submission of a valid draft ICP on `/tenant/projects/{projectId}/candidate-designer` redirects to `/tenant/projects/{projectId}`.
+    8. Browser view of `/tenant/projects/{projectId}` after a valid ICP save shows the text `ICP status: Defined`.
+    9. Browser view of `/tenant/projects/{projectId}` after a valid ICP save displays a visible `View ICP` action that opens `/tenant/projects/{projectId}/icp`.
+    10. Browser view of `/tenant/projects/{projectId}/icp` shows required competencies, experience expectations, success criteria, personal traits, and evaluation parameters from the saved ICP.
+    11. Browser view of `/tenant/projects/{projectId}/candidate-designer` with the project owner Hiring Manager session displays a visible `Back to project` action that opens `/tenant/projects/{projectId}`.
+    12. Browser view of `/tenant/projects/{projectId}/icp` with the project owner Hiring Manager session displays a visible `Back to project` action that opens `/tenant/projects/{projectId}`.
+    13. Submission of `/tenant/projects/{projectId}/candidate-designer` with no selected source of truth remains on `/tenant/projects/{projectId}/candidate-designer`.
+    14. A request to `/tenant/projects/{projectId}/candidate-designer` without an authenticated session redirects to `/sign-in`.
+    15. A request to `/tenant/projects/{projectId}/candidate-designer` with a tenant-superuser session redirects to `/sign-in`.
+    16. A request to `/tenant/projects/{projectId}/candidate-designer` with a Hiring Manager session for a project not owned by the signed-in Hiring Manager shows the text `Project not found`.
+    17. A request to `/tenant/projects/{projectId}/icp` without an authenticated session redirects to `/sign-in`.
+    18. A request to `/tenant/projects/{projectId}/icp` with a tenant-superuser session redirects to `/sign-in`.
+    19. A request to `/tenant/projects/{projectId}/icp` with a Hiring Manager session for a project not owned by the signed-in Hiring Manager shows the text `Project not found`.
+  - **Acceptance Tests (THIS must work):**
+    1. **AT1 - Browser activation of the visible `Define ICP` action on `/tenant/projects/{projectId}` with the project owner Hiring Manager session opens `/tenant/projects/{projectId}/candidate-designer`**
+    2. **AT2 - Browser view of `/tenant/projects/{projectId}/candidate-designer` with the project owner Hiring Manager session shows the project title, a source-of-truth multiselection, a model selection, a design prompt input, a `Generate ICP` action, and a `Save ICP` action**
+    3. **AT3 - Browser view of the source-of-truth multiselection on `/tenant/projects/{projectId}/candidate-designer` shows tenant sources of truth only**
+    4. **AT4 - Browser view of the model selection on `/tenant/projects/{projectId}/candidate-designer` shows AI models enabled for `Candidate Designer` only**
+    5. **AT5 - Browser submission of valid selected sources of truth, model value, and design prompt value on `/tenant/projects/{projectId}/candidate-designer` remains on `/tenant/projects/{projectId}/candidate-designer`**
+    6. **AT6 - Browser view of `/tenant/projects/{projectId}/candidate-designer` after a valid generation request shows one draft ICP with required competencies, experience expectations, success criteria, personal traits, and evaluation parameters**
+    7. **AT7 - Browser submission of a valid draft ICP on `/tenant/projects/{projectId}/candidate-designer` redirects to `/tenant/projects/{projectId}`**
+    8. **AT8 - Browser view of `/tenant/projects/{projectId}` after a valid ICP save shows the text `ICP status: Defined`**
+    9. **AT9 - Browser activation of the visible `View ICP` action on `/tenant/projects/{projectId}` opens `/tenant/projects/{projectId}/icp`**
+    10. **AT10 - Browser view of `/tenant/projects/{projectId}/icp` shows required competencies, experience expectations, success criteria, personal traits, and evaluation parameters from the saved ICP**
+    11. **AT11 - Browser activation of the visible `Back to project` action on `/tenant/projects/{projectId}/candidate-designer` opens `/tenant/projects/{projectId}`**
+    12. **AT12 - Browser activation of the visible `Back to project` action on `/tenant/projects/{projectId}/icp` opens `/tenant/projects/{projectId}`**
+    13. **AT13 - Browser submission of `/tenant/projects/{projectId}/candidate-designer` with no selected source of truth remains on `/tenant/projects/{projectId}/candidate-designer`**
+    14. **AT14 - Browser navigation to `/tenant/projects/{projectId}/candidate-designer` without an authenticated session redirects to `/sign-in`**
+    15. **AT15 - Browser navigation to `/tenant/projects/{projectId}/candidate-designer` with a tenant-superuser session redirects to `/sign-in`**
+    16. **AT16 - Browser navigation to `/tenant/projects/{projectId}/candidate-designer` with a Hiring Manager session for a project not owned by the signed-in Hiring Manager shows the text `Project not found`**
+    17. **AT17 - Browser navigation to `/tenant/projects/{projectId}/icp` without an authenticated session redirects to `/sign-in`**
+    18. **AT18 - Browser navigation to `/tenant/projects/{projectId}/icp` with a tenant-superuser session redirects to `/sign-in`**
+    19. **AT19 - Browser navigation to `/tenant/projects/{projectId}/icp` with a Hiring Manager session for a project not owned by the signed-in Hiring Manager shows the text `Project not found`**
+  - **Explicit Non-Goals (OUT OF SCOPE):** Interactive Job Post generation. Interview flow definition. Candidate registration. Candidate scoring.
+  - **Status:** Planned 2026-03-26.
+
+- [ ] **SIP-5.5: Governed AI workflow completes from model control to attributable ICP generation**
+  - **Summary:** The governed AI path supports model control, attributable source-of-truth ingestion, attributable ICP generation, and saved ICP access.
+  - **Objective (WHY):** The epic requires one end-to-end proof that governed AI execution produces usable recruitment design output and attributable cost evidence.
+  - **Scope Guard:** This SIP authorizes only the changes strictly required to satisfy the acceptance criteria. Incidental fixes, cleanups, refactors, or improvements outside the described change are not permitted.
+  - **Dependencies:** SIP-5.1, SIP-5.2, SIP-5.3, SIP-5.4.
+  - **Scope & Acceptance Criteria (WHAT must be true):**
+    1. A Global Admin session can open `/admin/ai` by activating the visible `AI governance` action on `/admin/dashboard`.
+    2. A Global Admin session can enable one AI model for `Source of truth ingestion` on `/admin/ai`.
+    3. A Global Admin session can enable one AI model for `Candidate Designer` on `/admin/ai`.
+    4. A tenant-superuser session can open `/tenant/sots/upload` by activating the visible `Upload source material` action on `/tenant/sots`.
+    5. A tenant-superuser session can submit one valid text file, topic value, name value, and model value on `/tenant/sots/upload`.
+    6. Browser view of `/tenant/sots/upload` after the valid generation request shows one draft source of truth.
+    7. A tenant-superuser session can save the generated source-of-truth draft on `/tenant/sots/upload`.
+    8. A project owner Hiring Manager session can open `/tenant/projects/{projectId}/candidate-designer` by activating the visible `Define ICP` action on `/tenant/projects/{projectId}`.
+    9. A project owner Hiring Manager session can submit valid selected sources of truth, model value, and design prompt value on `/tenant/projects/{projectId}/candidate-designer`.
+    10. Browser view of `/tenant/projects/{projectId}/candidate-designer` after the valid generation request shows one draft ICP.
+    11. A project owner Hiring Manager session can save the generated ICP draft on `/tenant/projects/{projectId}/candidate-designer`.
+    12. A project owner Hiring Manager session can open `/tenant/projects/{projectId}/icp` by activating the visible `View ICP` action on `/tenant/projects/{projectId}` after the ICP is saved.
+    13. Browser view of `/tenant/projects/{projectId}/icp` after the saved ICP is opened shows the saved ICP content.
+    14. Browser view of `/admin/ai` after the source-of-truth ingestion request shows one usage list row attributed to the tenant and the workflow `Source of truth ingestion`.
+    15. The usage list row for `Source of truth ingestion` on `/admin/ai` displays total tokens.
+    16. The usage list row for `Source of truth ingestion` on `/admin/ai` displays estimated cost.
+    17. Browser view of `/admin/ai` after the Candidate Designer request shows one usage list row attributed to the tenant, the project, and the workflow `Candidate Designer`.
+    18. The usage list row for `Candidate Designer` on `/admin/ai` displays total tokens.
+    19. The usage list row for `Candidate Designer` on `/admin/ai` displays estimated cost.
+  - **Acceptance Tests (THIS must work):**
+    1. **AT1 - Browser activation of the visible `AI governance` action on `/admin/dashboard` opens `/admin/ai`**
+    2. **AT2 - Browser submission of a valid model availability change on `/admin/ai` enables one AI model for `Source of truth ingestion`**
+    3. **AT3 - Browser submission of a valid model availability change on `/admin/ai` enables one AI model for `Candidate Designer`**
+    4. **AT4 - Browser activation of the visible `Upload source material` action on `/tenant/sots` with a tenant-superuser session opens `/tenant/sots/upload`**
+    5. **AT5 - Browser submission of one valid text file, topic value, name value, and model value on `/tenant/sots/upload` remains on `/tenant/sots/upload`**
+    6. **AT6 - Browser view of `/tenant/sots/upload` after the valid generation request shows one draft source of truth**
+    7. **AT7 - Browser submission of a valid generated draft on `/tenant/sots/upload` redirects to `/tenant/sots`**
+    8. **AT8 - Browser activation of the visible `Define ICP` action on `/tenant/projects/{projectId}` with the project owner Hiring Manager session opens `/tenant/projects/{projectId}/candidate-designer`**
+    9. **AT9 - Browser submission of valid selected sources of truth, model value, and design prompt value on `/tenant/projects/{projectId}/candidate-designer` remains on `/tenant/projects/{projectId}/candidate-designer`**
+    10. **AT10 - Browser view of `/tenant/projects/{projectId}/candidate-designer` after the valid generation request shows one draft ICP**
+    11. **AT11 - Browser submission of a valid draft ICP on `/tenant/projects/{projectId}/candidate-designer` redirects to `/tenant/projects/{projectId}`**
+    12. **AT12 - Browser activation of the visible `View ICP` action on `/tenant/projects/{projectId}` opens `/tenant/projects/{projectId}/icp`**
+    13. **AT13 - Browser view of `/tenant/projects/{projectId}/icp` after the saved ICP is opened shows the saved ICP content**
+    14. **AT14 - Browser view of `/admin/ai` after the source-of-truth ingestion request shows one usage list row attributed to the tenant and the workflow `Source of truth ingestion`**
+    15. **AT15 - Browser view of the usage list row for `Source of truth ingestion` on `/admin/ai` shows total tokens**
+    16. **AT16 - Browser view of the usage list row for `Source of truth ingestion` on `/admin/ai` shows estimated cost**
+    17. **AT17 - Browser view of `/admin/ai` after the Candidate Designer request shows one usage list row attributed to the tenant, the project, and the workflow `Candidate Designer`**
+    18. **AT18 - Browser view of the usage list row for `Candidate Designer` on `/admin/ai` shows total tokens**
+    19. **AT19 - Browser view of the usage list row for `Candidate Designer` on `/admin/ai` shows estimated cost**
+  - **Explicit Non-Goals (OUT OF SCOPE):** Invoice production. Candidate-facing AI workflows. Multi-project ICP reuse. Non-governed AI execution paths.
+  - **Status:** Planned 2026-03-26.
