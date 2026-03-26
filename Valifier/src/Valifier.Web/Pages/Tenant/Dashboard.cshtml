@@ -6,6 +6,7 @@
 
 <section class="vf-panel">
     <div class="vf-eyebrow">Tenant workspace</div>
+    <partial name="_WorkspaceNavigation" model='Valifier.Web.Pages.Shared.Navigation.TenantWorkspaceNavigation.ForDashboard(User)' />
     <h1>Tenant dashboard</h1>
 
     @if (Model.Workspace is null)

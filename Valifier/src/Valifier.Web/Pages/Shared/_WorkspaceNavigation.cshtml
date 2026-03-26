@@ -1,0 +1,31 @@
+@model Valifier.Web.Pages.Shared.Navigation.WorkspaceNavigationModel
+
+@if (!string.IsNullOrWhiteSpace(Model.CurrentLocationLabel) || Model.PrimaryLinks.Count > 0 || Model.ReturnLinks.Count > 0)
+{
+    <nav class="vf-workspace-nav" aria-label="Workspace navigation">
+        @if (!string.IsNullOrWhiteSpace(Model.CurrentLocationLabel))
+        {
+            <span class="vf-workspace-location">@Model.CurrentLocationLabel</span>
+        }
+
+        @if (Model.PrimaryLinks.Count > 0)
+        {
+            <div class="vf-workspace-link-row">
+                @foreach (var link in Model.PrimaryLinks)
+                {
+                    <a class="vf-secondary-link" href="@link.Href">@link.Label</a>
+                }
+            </div>
+        }
+
+        @if (Model.ReturnLinks.Count > 0)
+        {
+            <div class="vf-workspace-link-row">
+                @foreach (var link in Model.ReturnLinks)
+                {
+                    <a class="vf-secondary-link" href="@link.Href">@link.Label</a>
+                }
+            </div>
+        }
+    </nav>
+}

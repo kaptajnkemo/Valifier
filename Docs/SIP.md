@@ -391,3 +391,119 @@
     11. **AT11 - Browser activation of a `View project` action on `/tenant/projects` with the created Hiring Manager session opens `/tenant/projects/{projectId}`**
   - **Explicit Non-Goals (OUT OF SCOPE):** Ideal Candidate Profile definition. Interview flow definition. Candidate-facing entry points. Leaderboard access.
   - **Status:** Completed 2026-03-25.
+
+### **EPIC-4: Navigation and Workflow Recovery**
+- **Category:** USER-FACING
+- *Objective: Establish recoverable in-app navigation across the current authenticated Admin and Tenant workflows so users can move between workspace roots, section pages, create pages, and detail pages without guessing URLs or relying on browser history.*
+
+- [x] **SIP-4.1: Global Admin pages expose visible return navigation**
+  - **Summary:** The routes `/admin/dashboard`, `/admin/tenants/new`, and `/admin/tenants/{tenantId}` expose visible in-app navigation between the Admin workspace root and tenant subpages.
+  - **Objective (WHY):** The Global Admin must be able to move forward and backward across the current tenant bootstrap workflow without losing orientation.
+  - **Scope Guard:** This SIP authorizes only the changes strictly required to satisfy the acceptance criteria. Incidental fixes, cleanups, refactors, or improvements outside the described change are not permitted.
+  - **Dependencies:** SIP-1.2, SIP-1.3, SIP-1.5.
+  - **Scope & Acceptance Criteria (WHAT must be true):**
+    1. Browser view of `/admin/dashboard` with an authenticated Global Admin session displays a visible current-location label for the Admin workspace.
+    2. Browser view of `/admin/dashboard` with an authenticated Global Admin session displays a visible navigation action to `/admin/tenants/new`.
+    3. Browser view of `/admin/tenants/new` with an authenticated Global Admin session displays a visible `Admin dashboard` return action that opens `/admin/dashboard`.
+    4. Browser view of `/admin/tenants/{tenantId}` with an authenticated Global Admin session displays a visible `Admin dashboard` return action that opens `/admin/dashboard`.
+    5. Browser view of `/admin/tenants/{tenantId}` with an authenticated Global Admin session displays a visible `Back to tenants` action that opens `/admin/dashboard`.
+    6. A request to `/admin/tenants/new` without an authenticated Global Admin session redirects to `/sign-in`.
+    7. A request to `/admin/tenants/{tenantId}` without an authenticated Global Admin session redirects to `/sign-in`.
+  - **Acceptance Tests (THIS must work):**
+    1. **AT1 - Browser view of `/admin/dashboard` with an authenticated Global Admin session shows a visible current-location label for the Admin workspace**
+    2. **AT2 - Browser activation of the visible navigation action to `/admin/tenants/new` on `/admin/dashboard` opens `/admin/tenants/new`**
+    3. **AT3 - Browser activation of the visible `Admin dashboard` return action on `/admin/tenants/new` opens `/admin/dashboard`**
+    4. **AT4 - Browser activation of the visible `Admin dashboard` return action on `/admin/tenants/{tenantId}` opens `/admin/dashboard`**
+    5. **AT5 - Browser activation of the visible `Back to tenants` action on `/admin/tenants/{tenantId}` opens `/admin/dashboard`**
+    6. **AT6 - Browser navigation to `/admin/tenants/new` without an authenticated Global Admin session redirects to `/sign-in`**
+    7. **AT7 - Browser navigation to `/admin/tenants/{tenantId}` without an authenticated Global Admin session redirects to `/sign-in`**
+  - **Explicit Non-Goals (OUT OF SCOPE):** Tenant editing. Tenant deletion. Global Admin analytics. Cross-tenant impersonation.
+  - **Status:** Completed 2026-03-26.
+
+- [x] **SIP-4.2: Tenant superuser pages expose section navigation and return paths**
+  - **Summary:** The routes `/tenant/dashboard`, `/tenant/users`, `/tenant/users/new`, `/tenant/sots`, `/tenant/sots/new`, `/tenant/sots/{sotId}`, `/tenant/projects`, `/tenant/projects/new`, and `/tenant/projects/{projectId}` expose visible in-app section navigation and visible return paths for tenant-superuser workflows.
+  - **Objective (WHY):** Tenant superusers need continuous orientation and recovery across users, sources of truth, and projects after the first tenant bootstrap has been completed.
+  - **Scope Guard:** This SIP authorizes only the changes strictly required to satisfy the acceptance criteria. Incidental fixes, cleanups, refactors, or improvements outside the described change are not permitted.
+  - **Dependencies:** SIP-3.1, SIP-3.2, SIP-3.3, SIP-3.4.
+  - **Scope & Acceptance Criteria (WHAT must be true):**
+    1. Browser view of `/tenant/dashboard` with a tenant-superuser session displays visible navigation actions to `/tenant/users`, `/tenant/sots`, and `/tenant/projects`.
+    2. Browser view of `/tenant/users` with a tenant-superuser session displays visible navigation actions to `/tenant/dashboard`, `/tenant/sots`, and `/tenant/projects`.
+    3. Browser view of `/tenant/sots` with a tenant-superuser session displays visible navigation actions to `/tenant/dashboard`, `/tenant/users`, and `/tenant/projects`.
+    4. Browser view of `/tenant/projects` with a tenant-superuser session displays visible navigation actions to `/tenant/dashboard`, `/tenant/users`, and `/tenant/sots`.
+    5. Browser view of `/tenant/users/new` with a tenant-superuser session displays a visible `Tenant dashboard` return action and a visible `Users` return action.
+    6. Browser view of `/tenant/sots/new` with a tenant-superuser session displays a visible `Tenant dashboard` return action and a visible `Sources of truth` return action.
+    7. Browser view of `/tenant/sots/{sotId}` with a tenant-superuser session displays a visible `Tenant dashboard` return action and a visible `Sources of truth` return action.
+    8. Browser view of `/tenant/projects/new` with a tenant-superuser session displays a visible `Tenant dashboard` return action and a visible `Projects` return action.
+    9. Browser view of `/tenant/projects/{projectId}` with a tenant-superuser session displays a visible `Tenant dashboard` return action and a visible `Projects` return action.
+    10. A request to `/tenant/users/new` without an authenticated tenant-superuser session redirects to `/sign-in`.
+    11. A request to `/tenant/sots/new` without an authenticated tenant-superuser session redirects to `/sign-in`.
+    12. A request to `/tenant/projects/new` without an authenticated tenant-superuser or Hiring Manager session redirects to `/sign-in`.
+  - **Acceptance Tests (THIS must work):**
+    1. **AT1 - Browser view of `/tenant/dashboard` with a tenant-superuser session shows visible navigation actions to `/tenant/users`, `/tenant/sots`, and `/tenant/projects`**
+    2. **AT2 - Browser view of `/tenant/users` with a tenant-superuser session shows visible navigation actions to `/tenant/dashboard`, `/tenant/sots`, and `/tenant/projects`**
+    3. **AT3 - Browser view of `/tenant/sots` with a tenant-superuser session shows visible navigation actions to `/tenant/dashboard`, `/tenant/users`, and `/tenant/projects`**
+    4. **AT4 - Browser view of `/tenant/projects` with a tenant-superuser session shows visible navigation actions to `/tenant/dashboard`, `/tenant/users`, and `/tenant/sots`**
+    5. **AT5 - Browser view of `/tenant/users/new` with a tenant-superuser session shows a visible `Tenant dashboard` return action and a visible `Users` return action**
+    6. **AT6 - Browser view of `/tenant/sots/new` with a tenant-superuser session shows a visible `Tenant dashboard` return action and a visible `Sources of truth` return action**
+    7. **AT7 - Browser view of `/tenant/sots/{sotId}` with a tenant-superuser session shows a visible `Tenant dashboard` return action and a visible `Sources of truth` return action**
+    8. **AT8 - Browser view of `/tenant/projects/new` with a tenant-superuser session shows a visible `Tenant dashboard` return action and a visible `Projects` return action**
+    9. **AT9 - Browser view of `/tenant/projects/{projectId}` with a tenant-superuser session shows a visible `Tenant dashboard` return action and a visible `Projects` return action**
+    10. **AT10 - Browser navigation to `/tenant/users/new` without an authenticated tenant-superuser session redirects to `/sign-in`**
+    11. **AT11 - Browser navigation to `/tenant/sots/new` without an authenticated tenant-superuser session redirects to `/sign-in`**
+    12. **AT12 - Browser navigation to `/tenant/projects/new` without an authenticated tenant-superuser or Hiring Manager session redirects to `/sign-in`**
+  - **Explicit Non-Goals (OUT OF SCOPE):** User editing. Source-of-truth editing. Project editing. Ideal Candidate Profile definition.
+  - **Status:** Completed 2026-03-26.
+
+- [x] **SIP-4.3: Hiring Manager pages expose role-scoped return navigation**
+  - **Summary:** The routes `/tenant/dashboard`, `/tenant/projects`, `/tenant/projects/new`, and `/tenant/projects/{projectId}` expose visible in-app navigation for Hiring Manager workflows without exposing tenant-superuser sections.
+  - **Objective (WHY):** Hiring Managers need recoverable navigation across their project workflow while remaining inside role-scoped boundaries.
+  - **Scope Guard:** This SIP authorizes only the changes strictly required to satisfy the acceptance criteria. Incidental fixes, cleanups, refactors, or improvements outside the described change are not permitted.
+  - **Dependencies:** SIP-3.1, SIP-3.4, SIP-3.5.
+  - **Scope & Acceptance Criteria (WHAT must be true):**
+    1. Browser view of `/tenant/dashboard` with a Hiring Manager session displays a visible navigation action to `/tenant/projects`.
+    2. Browser view of `/tenant/projects` with a Hiring Manager session displays a visible navigation action to `/tenant/dashboard`.
+    3. Browser view of `/tenant/projects/new` with a Hiring Manager session displays a visible `Tenant dashboard` return action and a visible `Projects` return action.
+    4. Browser view of `/tenant/projects/{projectId}` with a Hiring Manager session displays a visible `Tenant dashboard` return action and a visible `Projects` return action.
+    5. Browser view of `/tenant/projects` with a Hiring Manager session does not display a visible navigation action to `/tenant/users`.
+    6. Browser view of `/tenant/projects` with a Hiring Manager session does not display a visible navigation action to `/tenant/sots`.
+    7. Browser view of `/tenant/projects/new` with a Hiring Manager session does not display a visible navigation action to `/tenant/users`.
+    8. Browser view of `/tenant/projects/new` with a Hiring Manager session does not display a visible navigation action to `/tenant/sots`.
+    9. Browser view of `/tenant/projects/{projectId}` with a Hiring Manager session does not display a visible navigation action to `/tenant/users`.
+    10. Browser view of `/tenant/projects/{projectId}` with a Hiring Manager session does not display a visible navigation action to `/tenant/sots`.
+  - **Acceptance Tests (THIS must work):**
+    1. **AT1 - Browser view of `/tenant/dashboard` with a Hiring Manager session shows a visible navigation action to `/tenant/projects`**
+    2. **AT2 - Browser view of `/tenant/projects` with a Hiring Manager session shows a visible navigation action to `/tenant/dashboard`**
+    3. **AT3 - Browser view of `/tenant/projects/new` with a Hiring Manager session shows a visible `Tenant dashboard` return action and a visible `Projects` return action**
+    4. **AT4 - Browser view of `/tenant/projects/{projectId}` with a Hiring Manager session shows a visible `Tenant dashboard` return action and a visible `Projects` return action**
+    5. **AT5 - Browser view of `/tenant/projects` with a Hiring Manager session does not show a visible navigation action to `/tenant/users`**
+    6. **AT6 - Browser view of `/tenant/projects` with a Hiring Manager session does not show a visible navigation action to `/tenant/sots`**
+    7. **AT7 - Browser view of `/tenant/projects/new` with a Hiring Manager session does not show a visible navigation action to `/tenant/users`**
+    8. **AT8 - Browser view of `/tenant/projects/new` with a Hiring Manager session does not show a visible navigation action to `/tenant/sots`**
+    9. **AT9 - Browser view of `/tenant/projects/{projectId}` with a Hiring Manager session does not show a visible navigation action to `/tenant/users`**
+    10. **AT10 - Browser view of `/tenant/projects/{projectId}` with a Hiring Manager session does not show a visible navigation action to `/tenant/sots`**
+  - **Explicit Non-Goals (OUT OF SCOPE):** Tenant-superuser navigation. Hiring Manager access to users. Hiring Manager access to sources of truth. Project editing.
+  - **Status:** Completed 2026-03-26.
+
+- [x] **SIP-4.4: Navigation recovery completes across Admin and Tenant workflows**
+  - **Summary:** The current Admin and Tenant workflows support visible round-trip navigation from workspace roots to create pages and detail pages and back again.
+  - **Objective (WHY):** The current delivered workflows need one end-to-end proof that the user can recover orientation and return paths without relying on browser history.
+  - **Scope Guard:** This SIP authorizes only the changes strictly required to satisfy the acceptance criteria. Incidental fixes, cleanups, refactors, or improvements outside the described change are not permitted.
+  - **Dependencies:** SIP-4.1, SIP-4.2, SIP-4.3.
+  - **Scope & Acceptance Criteria (WHAT must be true):**
+    1. A Global Admin session can navigate from `/admin/dashboard` to `/admin/tenants/new` and back to `/admin/dashboard` by activating visible in-app navigation actions only.
+    2. A Global Admin session can navigate from `/admin/dashboard` to `/admin/tenants/{tenantId}` and back to `/admin/dashboard` by activating visible in-app navigation actions only.
+    3. A tenant-superuser session can navigate from `/tenant/dashboard` to `/tenant/users`, to `/tenant/users/new`, back to `/tenant/users`, and back to `/tenant/dashboard` by activating visible in-app navigation actions only.
+    4. A tenant-superuser session can navigate from `/tenant/dashboard` to `/tenant/sots`, to `/tenant/sots/new`, back to `/tenant/sots`, and back to `/tenant/dashboard` by activating visible in-app navigation actions only.
+    5. A tenant-superuser session can navigate from `/tenant/dashboard` to `/tenant/projects`, to `/tenant/projects/new`, back to `/tenant/projects`, and back to `/tenant/dashboard` by activating visible in-app navigation actions only.
+    6. A tenant-superuser session can navigate from `/tenant/projects` to `/tenant/projects/{projectId}`, back to `/tenant/projects`, and back to `/tenant/dashboard` by activating visible in-app navigation actions only.
+    7. A Hiring Manager session can navigate from `/tenant/dashboard` to `/tenant/projects`, to `/tenant/projects/{projectId}`, back to `/tenant/projects`, and back to `/tenant/dashboard` by activating visible in-app navigation actions only.
+  - **Acceptance Tests (THIS must work):**
+    1. **AT1 - Browser workflow with a Global Admin session navigates from `/admin/dashboard` to `/admin/tenants/new` and returns to `/admin/dashboard` by activating visible in-app navigation actions only**
+    2. **AT2 - Browser workflow with a Global Admin session navigates from `/admin/dashboard` to `/admin/tenants/{tenantId}` and returns to `/admin/dashboard` by activating visible in-app navigation actions only**
+    3. **AT3 - Browser workflow with a tenant-superuser session navigates from `/tenant/dashboard` to `/tenant/users`, to `/tenant/users/new`, returns to `/tenant/users`, and returns to `/tenant/dashboard` by activating visible in-app navigation actions only**
+    4. **AT4 - Browser workflow with a tenant-superuser session navigates from `/tenant/dashboard` to `/tenant/sots`, to `/tenant/sots/new`, returns to `/tenant/sots`, and returns to `/tenant/dashboard` by activating visible in-app navigation actions only**
+    5. **AT5 - Browser workflow with a tenant-superuser session navigates from `/tenant/dashboard` to `/tenant/projects`, to `/tenant/projects/new`, returns to `/tenant/projects`, and returns to `/tenant/dashboard` by activating visible in-app navigation actions only**
+    6. **AT6 - Browser workflow with a tenant-superuser session navigates from `/tenant/projects` to `/tenant/projects/{projectId}`, returns to `/tenant/projects`, and returns to `/tenant/dashboard` by activating visible in-app navigation actions only**
+    7. **AT7 - Browser workflow with a Hiring Manager session navigates from `/tenant/dashboard` to `/tenant/projects`, to `/tenant/projects/{projectId}`, returns to `/tenant/projects`, and returns to `/tenant/dashboard` by activating visible in-app navigation actions only**
+  - **Explicit Non-Goals (OUT OF SCOPE):** Browser-history support. Candidate-facing navigation. New domain workflows. Global redesign of authenticated layouts outside the current pages.
+  - **Status:** Completed 2026-03-26.
